@@ -8,17 +8,20 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class BusyIndicator extends View {
+    private static final int POINT_COUNT = 12;
+
     private float layoutCenterX;
     private float layoutCenterY;
     private float baseRadius;
-
+    private float pointRadius;
+    private boolean firstLoad = true;
 
     public BusyIndicator(Context context) {
-        super(context);
+        this(context, null);
     }
 
     public BusyIndicator(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
     public BusyIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -29,41 +32,32 @@ public class BusyIndicator extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        if (firstLoad)
+            init();
+
+        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setColor(Color.DKGRAY);
+
+        canvas.drawARGB(100, 200, 200, 200);
+        float slice = 360 / POINT_COUNT;
+        for (int i = 0; i < POINT_COUNT; i++) {
+            float angle = slice * i;
+
+            ItemCoordinate itemCoordinate = getItemCoordinate(angle);
+            canvas.drawCircle(itemCoordinate.getX(), itemCoordinate.getY(), pointRadius, paint);
+        }
+
+    }
+
+    private void init() {
         int height = getHeight();
         int width = getWidth();
         baseRadius = height > width ? width /2 : height / 2;
         baseRadius = (float)(baseRadius * 0.75);
+        pointRadius = (float) (baseRadius * 0.15);
 
         layoutCenterX = getPaddingLeft() + width / 2;
         layoutCenterY = getPaddingTop() + height / 2;
-
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.GREEN);
-
-//        canvas.drawARGB(255, 200, 200, 200);
-//        canvas.drawCircle(layoutCenterX, layoutCenterY, 20, paint);
-
-//        Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-//        paint1.setColor(Color.BLUE);
-//
-//        Paint paint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
-//        paint2.setColor(Color.BLACK);
-//
-//        ItemCoordinate itemCoordinate1 = getItemCoordinate(90);
-//        ItemCoordinate itemCoordinate2 = getItemCoordinate(180);
-//
-//        canvas.drawCircle(itemCoordinate1.getX(), itemCoordinate1.getY(), 20, paint1);
-//        canvas.drawCircle(itemCoordinate2.getX(), itemCoordinate2.getY(), 20, paint2);
-
-//        double slice = 2 * Math.PI / 10;
-        float slice = 360 / 10;
-        for (int i = 0; i < 10; i++) {
-            float angle = slice * i;
-
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle);
-            canvas.drawCircle(itemCoordinate.getX(), itemCoordinate.getY(), 20, paint);
-        }
-
     }
 
     protected ItemCoordinate getItemCoordinate(float angleInDegrees) {
