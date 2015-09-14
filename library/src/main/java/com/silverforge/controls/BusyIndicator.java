@@ -40,20 +40,30 @@ public class BusyIndicator extends View {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(Color.GREEN);
 
-        canvas.drawARGB(255, 200, 200, 200);
-        canvas.drawCircle(layoutCenterX, layoutCenterY, 20, paint);
+//        canvas.drawARGB(255, 200, 200, 200);
+//        canvas.drawCircle(layoutCenterX, layoutCenterY, 20, paint);
 
-        Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint1.setColor(Color.BLUE);
+//        Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+//        paint1.setColor(Color.BLUE);
+//
+//        Paint paint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+//        paint2.setColor(Color.BLACK);
+//
+//        ItemCoordinate itemCoordinate1 = getItemCoordinate(90);
+//        ItemCoordinate itemCoordinate2 = getItemCoordinate(180);
+//
+//        canvas.drawCircle(itemCoordinate1.getX(), itemCoordinate1.getY(), 20, paint1);
+//        canvas.drawCircle(itemCoordinate2.getX(), itemCoordinate2.getY(), 20, paint2);
 
-        Paint paint2 = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint2.setColor(Color.BLACK);
+//        double slice = 2 * Math.PI / 10;
+        float slice = 360 / 10;
+        for (int i = 0; i < 10; i++) {
+            float angle = slice * i;
 
-        ItemCoordinate itemCoordinate1 = getItemCoordinate(90);
-        ItemCoordinate itemCoordinate2 = getItemCoordinate(180);
+            ItemCoordinate itemCoordinate = getItemCoordinate(angle);
+            canvas.drawCircle(itemCoordinate.getX(), itemCoordinate.getY(), 20, paint);
+        }
 
-        canvas.drawCircle(itemCoordinate1.getX(), itemCoordinate1.getY(), 20, paint1);
-        canvas.drawCircle(itemCoordinate2.getX(), itemCoordinate2.getY(), 20, paint2);
     }
 
     protected ItemCoordinate getItemCoordinate(float angleInDegrees) {
