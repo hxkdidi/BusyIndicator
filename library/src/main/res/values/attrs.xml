@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BusyIndicator">
+        <attr name="bigpoint_color" format="color" />
+        <attr name="smallpoint_color" format="color" />
+        <attr name="bigpoint_count" format="integer" />
+    </declare-styleable>
+</resources>

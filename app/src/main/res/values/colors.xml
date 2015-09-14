@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bigpoint_large">#FF487416</color>
+    <color name="smallpoint_large">#FF554C02</color>
+
+    <color name="bigpoint_medium">#FF532B72</color>
+    <color name="smallpoint_medium">#FF41002C</color>
+
+    <color name="bigpoint_small">#FFD4AA6A</color>
+    <color name="smallpoint_small">#FF801515</color>
+</resources>
