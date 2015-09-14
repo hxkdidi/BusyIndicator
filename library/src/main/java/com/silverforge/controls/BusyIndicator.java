@@ -15,8 +15,12 @@ public class BusyIndicator extends View {
     private float baseRadius;
     private float pointRadius;
     private boolean firstLoad = true;
-    private ItemCoordinate[] items = new ItemCoordinate[POINT_COUNT];
-    private Paint paint;
+    private ItemCoordinate[] outerItems = new ItemCoordinate[POINT_COUNT];
+    private Paint outerPaint;
+    private Paint singlePaint;
+    private ItemCoordinate single;
+    private float singleRadius;
+    private float singlePointRadius;
 
     public BusyIndicator(Context context) {
         this(context, null);
@@ -29,34 +33,46 @@ public class BusyIndicator extends View {
     public BusyIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setColor(Color.DKGRAY);
+        outerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        outerPaint.setColor(Color.DKGRAY);
+
+        singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        singlePaint.setColor(Color.BLACK);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        canvas.drawARGB(100, 200, 200, 200);
+
         if (firstLoad) {
             initializePoints();
-            canvas.drawARGB(100, 200, 200, 200);
             firstLoad = false;
         } else {
             for (int i = 0; i < POINT_COUNT; i++) {
-                float angle = items[i].getAngle();
+                float angle = outerItems[i].getAngle();
                 angle += 1;
                 if (angle > 360)
                     angle = angle - 360;
 
-                ItemCoordinate itemCoordinate = getItemCoordinate(angle);
-                items[i] = itemCoordinate;
+                ItemCoordinate itemCoordinate = getItemCoordinate(angle, baseRadius);
+                outerItems[i] = itemCoordinate;
             }
+
+            float singleAngle = single.getAngle();
+            singleAngle -= 1;
+            if (singleAngle < 0)
+                singleAngle = singleAngle + 360;
+
+            single = getItemCoordinate(singleAngle, singleRadius);
         }
 
-
-        for (ItemCoordinate item : items) {
-            canvas.drawCircle(item.getX(), item.getY(), pointRadius, paint);
+        for (ItemCoordinate item : outerItems) {
+            canvas.drawCircle(item.getX(), item.getY(), pointRadius, outerPaint);
         }
+
+        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
 
         invalidate();
     }
@@ -74,16 +90,20 @@ public class BusyIndicator extends View {
         float slice = 360 / POINT_COUNT;
         for (int i = 0; i < POINT_COUNT; i++) {
             int angle = (int) (slice * i);
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle);
-            items[i] = itemCoordinate;
+            ItemCoordinate itemCoordinate = getItemCoordinate(angle, baseRadius);
+            outerItems[i] = itemCoordinate;
         }
+
+        singleRadius = (float) (baseRadius * 0.80);
+        singlePointRadius = (float) (singleRadius * 0.05);
+        single = getItemCoordinate(270, singleRadius);
     }
 
-    protected ItemCoordinate getItemCoordinate(float angleInDegrees) {
+    protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius) {
         ItemCoordinate retValue = new ItemCoordinate();
 
-        float x = (float) ((baseRadius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
-        float y = (float) ((baseRadius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
+        float x = (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
+        float y = (float) ((radius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
 
         retValue.setX(x);
         retValue.setY(y);
