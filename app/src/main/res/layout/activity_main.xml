@@ -1,23 +1,41 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:gravity="center"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:paddingLeft="@dimen/activity_horizontal_margin"
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="@dimen/activity_vertical_margin"
                 tools:context=".MainActivity">
 
-    <TextView
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
     <com.silverforge.controls.BusyIndicator
+        app:bigpoint_color="@color/bigpoint_large"
+        app:smallpoint_color="@color/smallpoint_large"
+        app:bigpoint_count="12"
         android:layout_width="300dp"
         android:layout_height="300dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
 
-</RelativeLayout>
+    <com.silverforge.controls.BusyIndicator
+        app:bigpoint_color="@color/bigpoint_medium"
+        app:smallpoint_color="@color/smallpoint_medium"
+        app:bigpoint_count="12"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+    <com.silverforge.controls.BusyIndicator
+        app:bigpoint_color="@color/bigpoint_small"
+        app:smallpoint_color="@color/smallpoint_small"
+        app:bigpoint_count="12"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"/>
+
+</LinearLayout>
