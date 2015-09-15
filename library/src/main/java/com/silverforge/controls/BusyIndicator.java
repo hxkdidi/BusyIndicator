@@ -18,7 +18,8 @@ import android.view.View;
 import com.silverforge.library.R;
 
 public class BusyIndicator extends View {
-    public static float CORNER_RADIUS = 32.0f;
+
+    // region private members
 
     private boolean firstLoad = true;
 
@@ -44,6 +45,8 @@ public class BusyIndicator extends View {
 
     private byte angleModifier = 1;
 
+    // endregion
+
     public BusyIndicator(Context context) {
         this(context, null);
     }
@@ -65,31 +68,6 @@ public class BusyIndicator extends View {
 
         readAttributeValues(attributes);
         attributes.recycle();
-    }
-
-    private void readAttributeValues(TypedArray attributes) {
-        isBackgroundVisible = attributes.getBoolean(R.styleable.BusyIndicator_background_is_visible, false);
-        backgroundColor = attributes.getColor(R.styleable.BusyIndicator_background_color, Color.argb(100, 200, 200, 200));
-
-        int clipShapeIndex = attributes.getInteger(R.styleable.BusyIndicator_background_shape, ClipShape.ROUNDED_RECTANGLE.getIndex());
-        backgroundShape = ClipShape.values()[clipShapeIndex];
-
-        bigPointCount = attributes.getInteger(R.styleable.BusyIndicator_bigpoint_count, Color.BLACK);
-        if (bigPointCount < 4)
-            bigPointCount = 4;
-        if (bigPointCount > 20)
-            bigPointCount = 20;
-
-        outerItems = new ItemCoordinate[bigPointCount];
-
-        int smallPointColor = attributes.getColor(R.styleable.BusyIndicator_smallpoint_color, Color.BLACK);
-        int bigPointColor = attributes.getColor(R.styleable.BusyIndicator_bigpoint_color, Color.DKGRAY);
-
-        bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bigPaint.setColor(bigPointColor);
-
-        singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        singlePaint.setColor(smallPointColor);
     }
 
     @Override
@@ -131,30 +109,45 @@ public class BusyIndicator extends View {
         return super.onTouchEvent(event);
     }
 
-    private void initializeCanvas() {
-        Bitmap cb = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas cv = new Canvas(cb);
-        cv.drawColor(backgroundColor);
-        canvasBackground = getRoundedBitmap(cb, backgroundShape);
+    protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius) {
+        ItemCoordinate retValue = new ItemCoordinate();
+
+        float x = (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
+        float y = (float) ((radius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
+
+        retValue.setX(x);
+        retValue.setY(y);
+        retValue.setAngle(angleInDegrees);
+        retValue.setRadius(bigPointRadius);
+
+        return retValue;
     }
 
-    private void calculateMoves() {
-        float singleAngle = single.getAngle();
-        singleAngle -= angleModifier;
-        if (singleAngle < 0)
-            singleAngle = singleAngle + 360;
+    // region private methods
 
-        single = getItemCoordinate(singleAngle, singleRadius);
+    private void readAttributeValues(TypedArray attributes) {
+        isBackgroundVisible = attributes.getBoolean(R.styleable.BusyIndicator_background_is_visible, false);
+        backgroundColor = attributes.getColor(R.styleable.BusyIndicator_background_color, Color.argb(100, 200, 200, 200));
 
-        for (int i = 0; i < bigPointCount; i++) {
-            float angle = outerItems[i].getAngle();
-            angle += angleModifier;
-            if (angle > 360)
-                angle = angle - 360;
+        int clipShapeIndex = attributes.getInteger(R.styleable.BusyIndicator_background_shape, ClipShape.ROUNDED_RECTANGLE.getIndex());
+        backgroundShape = ClipShape.values()[clipShapeIndex];
 
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius);
-            outerItems[i] = itemCoordinate;
-        }
+        bigPointCount = attributes.getInteger(R.styleable.BusyIndicator_bigpoint_count, Color.BLACK);
+        if (bigPointCount < 4)
+            bigPointCount = 4;
+        if (bigPointCount > 20)
+            bigPointCount = 20;
+
+        outerItems = new ItemCoordinate[bigPointCount];
+
+        int smallPointColor = attributes.getColor(R.styleable.BusyIndicator_smallpoint_color, Color.BLACK);
+        int bigPointColor = attributes.getColor(R.styleable.BusyIndicator_bigpoint_color, Color.DKGRAY);
+
+        bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bigPaint.setColor(bigPointColor);
+
+        singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        singlePaint.setColor(smallPointColor);
     }
 
     private void initializePoints() {
@@ -179,18 +172,30 @@ public class BusyIndicator extends View {
         single = getItemCoordinate(270, singleRadius);
     }
 
-    protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius) {
-        ItemCoordinate retValue = new ItemCoordinate();
+    private void initializeCanvas() {
+        Bitmap cb = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(cb);
+        cv.drawColor(backgroundColor);
+        canvasBackground = getRoundedBitmap(cb, backgroundShape);
+    }
 
-        float x = (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
-        float y = (float) ((radius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
+    private void calculateMoves() {
+        float singleAngle = single.getAngle();
+        singleAngle -= angleModifier;
+        if (singleAngle < 0)
+            singleAngle = singleAngle + 360;
 
-        retValue.setX(x);
-        retValue.setY(y);
-        retValue.setAngle(angleInDegrees);
-        retValue.setRadius(bigPointRadius);
+        single = getItemCoordinate(singleAngle, singleRadius);
 
-        return retValue;
+        for (int i = 0; i < bigPointCount; i++) {
+            float angle = outerItems[i].getAngle();
+            angle += angleModifier;
+            if (angle > 360)
+                angle = angle - 360;
+
+            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius);
+            outerItems[i] = itemCoordinate;
+        }
     }
 
     private Bitmap getRoundedBitmap(Bitmap bitmap, ClipShape clipShape) {
@@ -225,7 +230,8 @@ public class BusyIndicator extends View {
         switch (clipShape) {
             case ROUNDED_RECTANGLE:
                 RectF rectF = new RectF(rect);
-                canvas.drawRoundRect(rectF, CORNER_RADIUS, CORNER_RADIUS, paint);
+                float cornerRadius = 32.0f;
+                canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paint);
                 break;
             case CIRCLE:
                 canvas.drawCircle(r, r, r, paint);
@@ -237,4 +243,6 @@ public class BusyIndicator extends View {
 
         return resultBitmap;
     }
+
+    // endregion
 }
