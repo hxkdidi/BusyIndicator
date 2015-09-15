@@ -73,24 +73,7 @@ public class BusyIndicator extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        if (firstLoad) {
-            initializePoints();
-            initializeCanvas();
-            firstLoad = false;
-        } else {
-            calculateMoves();
-        }
-
-        if (isBackgroundVisible)
-            canvas.drawBitmap(canvasBackground, 0, 0, null);
-
-        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
-        for (ItemCoordinate item : outerItems) {
-            canvas.drawCircle(item.getX(), item.getY(), item.getRadius(), bigPaint);
-        }
-
-        invalidate();
+        drawInfiniteIndicator(canvas);
     }
 
     @Override
@@ -148,6 +131,26 @@ public class BusyIndicator extends View {
 
         singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         singlePaint.setColor(smallPointColor);
+    }
+
+    private void drawInfiniteIndicator(Canvas canvas) {
+        if (firstLoad) {
+            initializePoints();
+            initializeCanvas();
+            firstLoad = false;
+        } else {
+            calculateMoves();
+        }
+
+        if (isBackgroundVisible)
+            canvas.drawBitmap(canvasBackground, 0, 0, null);
+
+        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
+        for (ItemCoordinate item : outerItems) {
+            canvas.drawCircle(item.getX(), item.getY(), item.getRadius(), bigPaint);
+        }
+
+        invalidate();
     }
 
     private void initializePoints() {
