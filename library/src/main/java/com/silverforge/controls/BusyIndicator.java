@@ -64,7 +64,6 @@ public class BusyIndicator extends View {
                         0);
 
         readAttributeValues(attributes);
-
         attributes.recycle();
     }
 
@@ -202,11 +201,14 @@ public class BusyIndicator extends View {
         int originalHeight = bitmap.getHeight();
         float r;
 
+        int size;
         if (originalWidth > originalHeight) {
-            resultBitmap = Bitmap.createBitmap(originalHeight, originalHeight, Bitmap.Config.ARGB_8888);
+            size = originalHeight;
+            resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             r = originalHeight / 2;
         } else {
-            resultBitmap = Bitmap.createBitmap(originalWidth, originalWidth, Bitmap.Config.ARGB_8888);
+            size = originalWidth;
+            resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
             r = originalWidth / 2;
         }
 
