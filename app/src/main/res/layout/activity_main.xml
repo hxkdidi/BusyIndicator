@@ -17,6 +17,9 @@
         app:bigpoint_count="12"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        app:background_is_visible="true"
+        app:background_color="@color/busy_background_large"
+        app:background_shape="circle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
@@ -24,6 +27,7 @@
         app:bigpoint_color="@color/bigpoint_medium"
         app:smallpoint_color="@color/smallpoint_medium"
         app:bigpoint_count="12"
+        app:background_is_visible="true"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"

@@ -8,4 +8,6 @@
 
     <color name="bigpoint_small">#FFD4AA6A</color>
     <color name="smallpoint_small">#FF801515</color>
+
+    <color name="busy_background_large">#55D4D36A</color>
 </resources>
