@@ -1,16 +1,26 @@
 package com.silverforge.busyindicator;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TimeUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.silverforge.controls.BusyIndicator;
+
 public class MainActivity extends AppCompatActivity {
+    private BusyIndicator busyIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        busyIndicator = (BusyIndicator) findViewById(R.id.smallFiniteBusyIndicator);
+
+        busyIndicator.setMaxValue(100);
+        new BusyIndicatorAsyncTask().execute();
     }
 
     @Override
@@ -33,5 +43,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    class BusyIndicatorAsyncTask extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] params) {
+
+            for (int i = 0; i < 101; i++) {
+                final int a = i;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        busyIndicator.setValue(a);
+                    }
+                });
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
+        }
     }
 }

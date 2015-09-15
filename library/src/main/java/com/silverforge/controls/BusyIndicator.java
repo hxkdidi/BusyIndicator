@@ -20,6 +20,7 @@ import com.silverforge.library.R;
 public class BusyIndicator extends View {
 
     // region private members
+    private final static int INITIAL_SMALL_POSITION = 270;
 
     private boolean firstLoad = true;
 
@@ -28,11 +29,15 @@ public class BusyIndicator extends View {
     private boolean isBackgroundVisible;
     private int backgroundColor;
     private ClipShape backgroundShape;
+    private boolean infinite;
+    private float maxValue;
 
     private ItemCoordinate[] outerItems;
     private Paint bigPaint;
     private Paint singlePaint;
+    private Paint singlePaintTransparent;
     private ItemCoordinate single;
+    private ItemCoordinate singleFixPoint;
 
     private float layoutCenterX;
     private float layoutCenterY;
@@ -73,7 +78,23 @@ public class BusyIndicator extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawInfiniteIndicator(canvas);
+
+        if (firstLoad) {
+            initializePoints();
+            initializeCanvas();
+            firstLoad = false;
+        } else {
+            if (infinite)
+                calculateMoves();
+        }
+
+        if (isBackgroundVisible)
+            canvas.drawBitmap(canvasBackground, 0, 0, null);
+
+        if (infinite)
+            drawInfiniteIndicator(canvas);
+        else
+            drawLoadingIndicator(canvas);
     }
 
     @Override
@@ -92,7 +113,32 @@ public class BusyIndicator extends View {
         return super.onTouchEvent(event);
     }
 
-    protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius) {
+    public void setMaxValue(float maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public void setMaxValue(int maxValue) {
+        this.maxValue = (float)maxValue;
+    }
+
+    public void setValue(float value) {
+        calculateProgress(value);
+    }
+
+    public void setValue(int value) {
+        calculateProgress((float)value);
+    }
+
+    private void calculateProgress(float value) {
+        if (value <= maxValue && value > 0){
+            float currentAngle = (360 / maxValue) * value;
+            currentAngle += 270;
+            single = getItemCoordinate(currentAngle, bigRadius, singlePointRadius);
+            invalidate();
+        }
+    }
+
+    protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius, float pointRadius) {
         ItemCoordinate retValue = new ItemCoordinate();
 
         float x = (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
@@ -101,7 +147,7 @@ public class BusyIndicator extends View {
         retValue.setX(x);
         retValue.setY(y);
         retValue.setAngle(angleInDegrees);
-        retValue.setRadius(bigPointRadius);
+        retValue.setRadius(pointRadius);
 
         return retValue;
     }
@@ -131,26 +177,35 @@ public class BusyIndicator extends View {
 
         singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         singlePaint.setColor(smallPointColor);
+
+        singlePaintTransparent = new Paint();
+        singlePaintTransparent.setColor(smallPointColor);
+        singlePaintTransparent.setAlpha(100);
+
+        infinite = attributes.getBoolean(R.styleable.BusyIndicator_infinite, true);
+        maxValue = attributes.getFloat(R.styleable.BusyIndicator_max_value, 100F);
     }
 
     private void drawInfiniteIndicator(Canvas canvas) {
-        if (firstLoad) {
-            initializePoints();
-            initializeCanvas();
-            firstLoad = false;
-        } else {
-            calculateMoves();
-        }
-
-        if (isBackgroundVisible)
-            canvas.drawBitmap(canvasBackground, 0, 0, null);
-
-        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
         for (ItemCoordinate item : outerItems) {
             canvas.drawCircle(item.getX(), item.getY(), item.getRadius(), bigPaint);
         }
 
+        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
+
         invalidate();
+    }
+
+    private void drawLoadingIndicator(Canvas canvas) {
+        RectF rect = new RectF();
+        rect.set(0, 0, getHeight(), getWidth());
+        canvas.drawArc(rect, 630, single.getAngle() - 270, true, singlePaintTransparent);
+
+        for (ItemCoordinate item : outerItems) {
+            canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, bigPaint);
+        }
+        canvas.drawCircle(singleFixPoint.getX(), singleFixPoint.getY(), singlePointRadius, singlePaint);
+        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
     }
 
     private void initializePoints() {
@@ -166,13 +221,20 @@ public class BusyIndicator extends View {
         float slice = 360 / bigPointCount;
         for (int i = 0; i < bigPointCount; i++) {
             int angle = (int) (slice * i);
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius);
+            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius, bigPointRadius);
             outerItems[i] = itemCoordinate;
         }
 
         singleRadius = (float) (bigRadius * 0.80);
         singlePointRadius = (float) (singleRadius * 0.05);
-        single = getItemCoordinate(270, singleRadius);
+
+        if (infinite) {
+            single = getItemCoordinate(INITIAL_SMALL_POSITION, singleRadius, singlePointRadius);
+            singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, singleRadius, singlePointRadius);
+        } else {
+            single = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
+            singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
+        }
     }
 
     private void initializeCanvas() {
@@ -183,22 +245,22 @@ public class BusyIndicator extends View {
     }
 
     private void calculateMoves() {
-        float singleAngle = single.getAngle();
-        singleAngle -= angleModifier;
-        if (singleAngle < 0)
-            singleAngle = singleAngle + 360;
-
-        single = getItemCoordinate(singleAngle, singleRadius);
-
         for (int i = 0; i < bigPointCount; i++) {
             float angle = outerItems[i].getAngle();
             angle += angleModifier;
             if (angle > 360)
                 angle = angle - 360;
 
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius);
+            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius, bigPointRadius);
             outerItems[i] = itemCoordinate;
         }
+
+        float singleAngle = single.getAngle();
+        singleAngle -= angleModifier;
+        if (singleAngle < 0)
+            singleAngle = singleAngle + 360;
+
+        single = getItemCoordinate(singleAngle, singleRadius, singlePointRadius);
     }
 
     private Bitmap getRoundedBitmap(Bitmap bitmap, ClipShape clipShape) {

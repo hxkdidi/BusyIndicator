@@ -34,9 +34,11 @@
         android:layout_centerVertical="true"/>
 
     <com.silverforge.controls.BusyIndicator
+        android:id="@+id/smallFiniteBusyIndicator"
         app:bigpoint_color="@color/bigpoint_small"
         app:smallpoint_color="@color/smallpoint_small"
         app:bigpoint_count="12"
+        app:infinite="false"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"

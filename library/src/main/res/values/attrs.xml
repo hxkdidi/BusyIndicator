@@ -10,5 +10,7 @@
             <enum name="rounded_rectangle" value="0" />
             <enum name="circle" value="1" />
         </attr>
+        <attr name="infinite" format="boolean" />
+        <attr name="max_value" format="float" />
     </declare-styleable>
 </resources>
