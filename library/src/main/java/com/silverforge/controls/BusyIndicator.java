@@ -43,7 +43,6 @@ public class BusyIndicator extends View {
     private float layoutCenterY;
 
     private float bigRadius;
-    private float bigPointRadius;
 
     private float singleRadius;
     private float singlePointRadius;
@@ -85,7 +84,7 @@ public class BusyIndicator extends View {
             firstLoad = false;
         } else {
             if (infinite)
-                calculateMoves();
+                calculateInfiniteMoves();
         }
 
         if (isBackgroundVisible)
@@ -101,16 +100,15 @@ public class BusyIndicator extends View {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         int action = event.getAction();
         switch (action) {
+            case MotionEvent.ACTION_UP:
+                angleModifier = 1;
+                break;
             case MotionEvent.ACTION_DOWN:
-
-                if (angleModifier > 1)
-                    angleModifier = 1;
-                else
-                    angleModifier = 2;
+                angleModifier = 3;
                 break;
         }
 
-        return super.onTouchEvent(event);
+        return true;
     }
 
     public void setMaxValue(float maxValue) {
@@ -133,17 +131,16 @@ public class BusyIndicator extends View {
         if (value <= maxValue && value > 0){
             float currentAngle = (360 / maxValue) * value;
             currentAngle += 270;
-            single = getItemCoordinate(currentAngle, bigRadius, singlePointRadius);
+            recalculateItemCoordinate(currentAngle, bigRadius, single);
             invalidate();
         }
     }
 
     protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius, float pointRadius) {
+        float x = getXCoordinate(angleInDegrees, radius);
+        float y = getYCoordinate(angleInDegrees, radius);
+
         ItemCoordinate retValue = new ItemCoordinate();
-
-        float x = (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
-        float y = (float) ((radius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
-
         retValue.setX(x);
         retValue.setY(y);
         retValue.setAngle(angleInDegrees);
@@ -152,7 +149,24 @@ public class BusyIndicator extends View {
         return retValue;
     }
 
+    protected void recalculateItemCoordinate(float angleInDegrees, float radius, ItemCoordinate itemCoordinate) {
+        float x = getXCoordinate(angleInDegrees, radius);
+        float y = getYCoordinate(angleInDegrees, radius);
+
+        itemCoordinate.setX(x);
+        itemCoordinate.setY(y);
+        itemCoordinate.setAngle(angleInDegrees);
+    }
+
     // region private methods
+
+    private float getYCoordinate(float angleInDegrees, float radius) {
+        return (float) ((radius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
+    }
+
+    private float getXCoordinate(float angleInDegrees, float radius) {
+        return (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
+    }
 
     private void readAttributeValues(TypedArray attributes) {
         isBackgroundVisible = attributes.getBoolean(R.styleable.BusyIndicator_background_is_visible, false);
@@ -213,7 +227,7 @@ public class BusyIndicator extends View {
         int width = getWidth();
         bigRadius = height > width ? width /2 : height / 2;
         bigRadius = (float)(bigRadius * 0.75);
-        bigPointRadius = (float) (bigRadius * 0.15);
+        float bigPointRadius = (float) (bigRadius * 0.15);
 
         layoutCenterX = getPaddingLeft() + width / 2;
         layoutCenterY = getPaddingTop() + height / 2;
@@ -244,15 +258,14 @@ public class BusyIndicator extends View {
         canvasBackground = getRoundedBitmap(cb, backgroundShape);
     }
 
-    private void calculateMoves() {
+    private void calculateInfiniteMoves() {
         for (int i = 0; i < bigPointCount; i++) {
             float angle = outerItems[i].getAngle();
             angle += angleModifier;
             if (angle > 360)
                 angle = angle - 360;
 
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius, bigPointRadius);
-            outerItems[i] = itemCoordinate;
+            recalculateItemCoordinate(angle, bigRadius, outerItems[i]);
         }
 
         float singleAngle = single.getAngle();
@@ -260,7 +273,7 @@ public class BusyIndicator extends View {
         if (singleAngle < 0)
             singleAngle = singleAngle + 360;
 
-        single = getItemCoordinate(singleAngle, singleRadius, singlePointRadius);
+        recalculateItemCoordinate(singleAngle, singleRadius, single);
     }
 
     private Bitmap getRoundedBitmap(Bitmap bitmap, ClipShape clipShape) {
