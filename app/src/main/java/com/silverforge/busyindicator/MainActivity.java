@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        busyIndicator = (BusyIndicator) findViewById(R.id.smallFiniteBusyIndicator);
+        busyIndicator = (BusyIndicator) findViewById(R.id.finiteBusyIndicator);
 
         busyIndicator.setMaxValue(100);
         new BusyIndicatorAsyncTask().execute();
