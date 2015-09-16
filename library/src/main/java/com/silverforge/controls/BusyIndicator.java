@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -31,6 +32,9 @@ public class BusyIndicator extends View {
     private ClipShape backgroundShape;
     private boolean infinite;
     private float maxValue;
+    private float currentValue;
+
+    private boolean isPercentageVisible;
 
     private ItemCoordinate[] outerItems;
     private Paint bigPaint;
@@ -38,9 +42,13 @@ public class BusyIndicator extends View {
     private Paint singlePaintTransparent;
     private ItemCoordinate single;
     private ItemCoordinate singleFixPoint;
+    private Paint textPaint;
 
     private float layoutCenterX;
     private float layoutCenterY;
+
+    private float textPosX;
+    private float textPosY;
 
     private float bigRadius;
 
@@ -144,6 +152,8 @@ public class BusyIndicator extends View {
             if (value >= maxValue)
                 value = maxValue;
 
+            currentValue = value;
+
             float currentAngle = (360 / maxValue) * value;
             currentAngle += 270;
             recalculateItemCoordinate(currentAngle, bigRadius, single);
@@ -191,10 +201,12 @@ public class BusyIndicator extends View {
         isBackgroundVisible = attributes.getBoolean(R.styleable.BusyIndicator_background_is_visible, false);
         backgroundColor = attributes.getColor(R.styleable.BusyIndicator_background_color, Color.argb(100, 200, 200, 200));
 
+        isPercentageVisible = attributes.getBoolean(R.styleable.BusyIndicator_percentage_is_visible, true);
+
         int clipShapeIndex = attributes.getInteger(R.styleable.BusyIndicator_background_shape, ClipShape.ROUNDED_RECTANGLE.getIndex());
         backgroundShape = ClipShape.values()[clipShapeIndex];
 
-        bigPointCount = attributes.getInteger(R.styleable.BusyIndicator_bigpoint_count, Color.BLACK);
+        bigPointCount = attributes.getInteger(R.styleable.BusyIndicator_bigpoint_count, 12);
         if (bigPointCount < 4)
             bigPointCount = 4;
         if (bigPointCount > 20)
@@ -237,6 +249,12 @@ public class BusyIndicator extends View {
         }
         canvas.drawCircle(singleFixPoint.getX(), singleFixPoint.getY(), singlePointRadius, singlePaint);
         canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
+
+        if (isPercentageVisible) {
+            float v = (100 / maxValue) * currentValue;
+            String text = String.format("%.2f%%", v);
+            canvas.drawText(text, textPosX, textPosY, textPaint);
+        }
     }
 
     private void initializePoints() {
@@ -265,7 +283,17 @@ public class BusyIndicator extends View {
         } else {
             single = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
             singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
-         }
+        }
+
+        float textSize = (float) (bigRadius * 0.3);
+        textPaint = new Paint();
+        textPaint.setColor(singlePaint.getColor());
+        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTypeface(Typeface.MONOSPACE);
+        textPaint.setTextSize(textSize);
+
+        textPosX = layoutCenterX;
+        textPosY = layoutCenterX - ((textPaint.descent() + textPaint.ascent()) / 2);
     }
 
     private void initializeCanvas() {
