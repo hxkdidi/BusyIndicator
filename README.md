@@ -16,12 +16,8 @@ The BusyIndicator is a progress indicator with finite and infinite state.
 
 ## How do I get set up? ##
 
-```groovy
-dependencies {
-    ...
-    compile 'com.silverforge.controls:busyindicator:1.0.0'
-}
-```
+Soon...
+
 
 ##### Issues/contact #####
 
