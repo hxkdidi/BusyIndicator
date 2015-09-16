@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.silverforge.controls.BusyIndicator;
+import com.silverforge.controls.Circle;
+import com.silverforge.controls.CircleAngleAnimation;
 
 public class MainActivity extends AppCompatActivity {
     private BusyIndicator busyIndicator;
@@ -21,6 +23,12 @@ public class MainActivity extends AppCompatActivity {
 
         busyIndicator.setMaxValue(100);
         new BusyIndicatorAsyncTask().execute();
+
+        Circle circle = (Circle) findViewById(R.id.circle);
+
+        CircleAngleAnimation animation = new CircleAngleAnimation(circle, 240);
+        animation.setDuration(1000);
+        circle.startAnimation(animation);
     }
 
     @Override

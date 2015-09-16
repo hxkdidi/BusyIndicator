@@ -22,6 +22,9 @@ public class BusyIndicator extends View {
     // region private members
     private final static int INITIAL_SMALL_POSITION = 270;
 
+    private float previousSingleAngle;
+    private float previousArcAngle;
+
     private boolean firstLoad = true;
 
     private int bigPointCount;
@@ -50,6 +53,7 @@ public class BusyIndicator extends View {
     private byte angleModifier = 1;
 
     // endregion
+
 
     public BusyIndicator(Context context) {
         this(context, null);
@@ -132,6 +136,9 @@ public class BusyIndicator extends View {
             float currentAngle = (360 / maxValue) * value;
             currentAngle += 270;
             recalculateItemCoordinate(currentAngle, bigRadius, single);
+
+
+
             invalidate();
         }
     }
@@ -204,22 +211,24 @@ public class BusyIndicator extends View {
         for (ItemCoordinate item : outerItems) {
             canvas.drawCircle(item.getX(), item.getY(), item.getRadius(), bigPaint);
         }
-
         canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
-
         invalidate();
     }
 
     private void drawLoadingIndicator(Canvas canvas) {
+        float arcAngle = single.getAngle() - 270;
         RectF rect = new RectF();
         rect.set(0, 0, getHeight(), getWidth());
-        canvas.drawArc(rect, 630, single.getAngle() - 270, true, singlePaintTransparent);
+        canvas.drawArc(rect, 630, arcAngle, true, singlePaintTransparent);
 
         for (ItemCoordinate item : outerItems) {
             canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, bigPaint);
         }
         canvas.drawCircle(singleFixPoint.getX(), singleFixPoint.getY(), singlePointRadius, singlePaint);
         canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
+
+        previousSingleAngle = single.getAngle();
+        previousArcAngle = arcAngle;
     }
 
     private void initializePoints() {
