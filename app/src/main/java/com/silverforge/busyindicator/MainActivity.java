@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
 
-            for (int i = 0; i < 101; i++) {
+            for (int i = 0; i < 101; i += 5) {
                 final int a = i;
                 runOnUiThread(new Runnable() {
                     @Override
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 try {
-                    Thread.sleep(500);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
