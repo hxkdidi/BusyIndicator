@@ -21,14 +21,13 @@ public class MainActivity extends AppCompatActivity {
 
         busyIndicator = (BusyIndicator) findViewById(R.id.finiteBusyIndicator);
 
-        busyIndicator.setMaxValue(100);
+        busyIndicator.setMaxValue(102);
         new BusyIndicatorAsyncTask().execute();
 
-        Circle circle = (Circle) findViewById(R.id.circle);
-
-        CircleAngleAnimation animation = new CircleAngleAnimation(circle, 240);
-        animation.setDuration(1000);
-        circle.startAnimation(animation);
+//        Circle circle = (Circle) findViewById(R.id.circle);
+//        CircleAngleAnimation animation = new CircleAngleAnimation(circle, 240);
+//        animation.setDuration(1000);
+//        circle.startAnimation(animation);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Object doInBackground(Object[] params) {
 
-            for (int i = 0; i < 101; i += 5) {
+            for (int i = 0; i <= 102; i += 3) {
                 final int a = i;
                 runOnUiThread(new Runnable() {
                     @Override

@@ -14,8 +14,6 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
 
 import com.silverforge.library.R;
 
@@ -52,7 +50,6 @@ public class BusyIndicator extends View {
     private byte angleModifier = 1;
 
     private float arcAngle;
-
 
     // endregion
 
@@ -133,29 +130,28 @@ public class BusyIndicator extends View {
         calculateProgress((float)value);
     }
 
-
-    public float getArcAngle() {
+    float getArcAngle() {
         return arcAngle;
     }
 
-    public void setArcAngle(float aa) {
+    void setArcAngle(float aa) {
         arcAngle = aa;
     }
 
     private void calculateProgress(float value) {
-        if (value <= maxValue && value > 0){
+        if (value > 0){
+
+            if (value >= maxValue)
+                value = maxValue;
 
             float currentAngle = (360 / maxValue) * value;
             currentAngle += 270;
             recalculateItemCoordinate(currentAngle, bigRadius, single);
 
             float aa = (currentAngle - 270);
-
             LoaderAngleAnimation animation = new LoaderAngleAnimation(this, aa);
-            animation.setDuration(500);
+            animation.setDuration(300);
             this.startAnimation(animation);
-
-//            invalidate();
         }
     }
 
@@ -232,7 +228,6 @@ public class BusyIndicator extends View {
     }
 
     private void drawLoadingIndicator(Canvas canvas) {
-//        arcAngle = single.getAngle() - 270;
         RectF rect = new RectF();
         rect.set(0, 0, getHeight(), getWidth());
         canvas.drawArc(rect, 630, arcAngle, true, singlePaintTransparent);
@@ -242,9 +237,6 @@ public class BusyIndicator extends View {
         }
         canvas.drawCircle(singleFixPoint.getX(), singleFixPoint.getY(), singlePointRadius, singlePaint);
         canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
-
-//        previousSingleAngle = single.getAngle();
-//        previousArcAngle = arcAngle;
     }
 
     private void initializePoints() {
@@ -273,8 +265,6 @@ public class BusyIndicator extends View {
         } else {
             single = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
             singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
-
-//            previousArcAngle = single.getAngle() - 270;
          }
     }
 
@@ -350,32 +340,4 @@ public class BusyIndicator extends View {
     }
 
     // endregion
-
-//    class LoaderAngleAnimation extends Animation {
-//
-////        private Circle circle;
-//
-////        private float oldAngle;
-////        private float newAngle;
-//
-////        public LoaderAngleAnimation(Circle circle, int newAngle) {
-////            this.oldAngle = circle.getAngle();
-////            this.newAngle = newAngle;
-////            this.circle = circle;
-////        }
-//
-//        @Override
-//        protected void applyTransformation(float interpolatedTime, Transformation transformation) {
-////            float angle = oldAngle + ((newAngle - oldAngle) * interpolatedTime);
-////
-////            circle.setAngle(angle);
-//
-//            float aangle = single.getAngle() - 270;
-//            arcAngle = previousArcAngle + ((aangle - previousArcAngle) * interpolatedTime);
-//
-//            previousArcAngle = aangle;
-//
-//            requestLayout();
-//        }
-//    }
 }
