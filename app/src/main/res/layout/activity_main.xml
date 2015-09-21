@@ -21,6 +21,7 @@
         app:percentage_is_visible="true"
         app:bigpoint_color="@color/bigpoint_large"
         app:smallpoint_color="@color/smallpoint_large"
+        app:decimal_places="1"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
@@ -31,6 +32,9 @@
         app:smallpoint_color="@color/smallpoint_medium"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        app:background_is_visible="true"
+        app:background_color="@color/busy_background_large"
+        app:background_shape="circle"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
@@ -38,9 +42,6 @@
         app:bigpoint_color="@color/bigpoint_small"
         app:smallpoint_color="@color/smallpoint_small"
         app:bigpoint_count="12"
-        app:background_is_visible="true"
-        app:background_color="@color/busy_background_large"
-        app:background_shape="circle"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_centerHorizontal="true"

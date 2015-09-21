@@ -13,5 +13,6 @@
         <attr name="infinite" format="boolean" />
         <attr name="max_value" format="float" />
         <attr name="percentage_is_visible" format="boolean" />
+        <attr name="decimal_places" format="integer" />
     </declare-styleable>
 </resources>

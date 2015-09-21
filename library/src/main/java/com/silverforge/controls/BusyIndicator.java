@@ -18,6 +18,9 @@ import android.view.View;
 
 import com.silverforge.library.R;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BusyIndicator extends View {
 
     // region private members
@@ -33,6 +36,7 @@ public class BusyIndicator extends View {
     private boolean infinite;
     private float maxValue;
     private float currentValue;
+    private int decimalPlaces;
 
     private boolean isPercentageVisible;
 
@@ -43,6 +47,10 @@ public class BusyIndicator extends View {
     private ItemCoordinate single;
     private ItemCoordinate singleFixPoint;
     private Paint textPaint;
+
+    private Paint strokePaint;
+    private RectF rect;
+
 
     private float layoutCenterX;
     private float layoutCenterY;
@@ -59,8 +67,9 @@ public class BusyIndicator extends View {
 
     private float arcAngle;
 
-    // endregion
+    private Map<Integer, String> decimalPlacesMap = new HashMap<>();
 
+    // endregion
 
     public BusyIndicator(Context context) {
         this(context, null);
@@ -72,6 +81,10 @@ public class BusyIndicator extends View {
 
     public BusyIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        decimalPlacesMap.put(0, "%.0f%%");
+        decimalPlacesMap.put(1, "%.1f%%");
+        decimalPlacesMap.put(2, "%.2f%%");
 
         TypedArray attributes
             = context
@@ -229,6 +242,12 @@ public class BusyIndicator extends View {
 
         infinite = attributes.getBoolean(R.styleable.BusyIndicator_infinite, true);
         maxValue = attributes.getFloat(R.styleable.BusyIndicator_max_value, 100F);
+
+        decimalPlaces = attributes.getInt(R.styleable.BusyIndicator_decimal_places, 0);
+        if (decimalPlaces > 2)
+            decimalPlaces = 2;
+        if (decimalPlaces < 0)
+            decimalPlaces = 0;
     }
 
     private void drawInfiniteIndicator(Canvas canvas) {
@@ -252,7 +271,9 @@ public class BusyIndicator extends View {
 
         if (isPercentageVisible) {
             float v = (100 / maxValue) * currentValue;
-            String text = String.format("%.2f%%", v);
+
+            String formatString = decimalPlacesMap.get(decimalPlaces);
+            String text = String.format(formatString, v);
             canvas.drawText(text, textPosX, textPosY, textPaint);
         }
     }
@@ -301,6 +322,19 @@ public class BusyIndicator extends View {
         Canvas cv = new Canvas(cb);
         cv.drawColor(backgroundColor);
         canvasBackground = getRoundedBitmap(cb, backgroundShape);
+
+        final int strokeWidth = 40;
+
+        strokePaint = new Paint();
+        strokePaint.setAntiAlias(true);
+        strokePaint.setStyle(Paint.Style.STROKE);
+        strokePaint.setStrokeWidth(strokeWidth);
+        //Circle color
+        strokePaint.setColor(Color.RED);
+
+        //size 200x200 example
+        rect = new RectF(strokeWidth, strokeWidth, 200 + strokeWidth, 200 + strokeWidth);
+
     }
 
     private void calculateInfiniteMoves() {
