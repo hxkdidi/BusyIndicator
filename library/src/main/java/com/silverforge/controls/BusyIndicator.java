@@ -21,35 +21,24 @@ import com.silverforge.library.R;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BusyIndicator extends View {
+public class BusyIndicator extends Indicator {
 
     // region private members
     private final static int INITIAL_SMALL_POSITION = 270;
 
     private boolean firstLoad = true;
 
-    private int bigPointCount;
     private Bitmap canvasBackground;
-    private boolean isBackgroundVisible;
-    private int backgroundColor;
-    private ClipShape backgroundShape;
-    private boolean infinite;
     private float maxValue;
     private float currentValue;
-    private int decimalPlaces;
 
-    private boolean isPercentageVisible;
-
-    private ItemCoordinate[] outerItems;
     private Paint bigPaint;
     private Paint singlePaint;
     private Paint singlePaintTransparent;
-    private ItemCoordinate single;
-    private ItemCoordinate singleFixPoint;
     private Paint textPaint;
 
-    private int smallPointColor;
-    private int bigPointColor;
+    private ItemCoordinate single;
+    private ItemCoordinate singleFixPoint;
 
     private RectF rect = new RectF();
 
@@ -68,7 +57,7 @@ public class BusyIndicator extends View {
 
     private float arcAngle;
 
-    private Map<Integer, String> decimalPlacesMap = new HashMap<>();
+    protected ItemCoordinate[] outerItems;
 
     // endregion
 
@@ -83,20 +72,7 @@ public class BusyIndicator extends View {
     public BusyIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        decimalPlacesMap.put(0, "%.0f%%");
-        decimalPlacesMap.put(1, "%.1f%%");
-        decimalPlacesMap.put(2, "%.2f%%");
-
-        TypedArray attributes
-            = context
-                .getTheme()
-                .obtainStyledAttributes(attrs,
-                        R.styleable.BusyIndicator,
-                        defStyleAttr,
-                        0);
-
-        readAttributeValues(attributes);
-        attributes.recycle();
+        outerItems = new ItemCoordinate[configSettings.getBigPointCount()];
     }
 
     @Override
@@ -108,14 +84,14 @@ public class BusyIndicator extends View {
             initializeCanvas();
             firstLoad = false;
         } else {
-            if (infinite)
+            if (configSettings.isInfinite())
                 calculateInfiniteMoves();
         }
 
-        if (isBackgroundVisible)
+        if (configSettings.isBackgroundVisible())
             canvas.drawBitmap(canvasBackground, 0, 0, null);
 
-        if (infinite)
+        if (configSettings.isInfinite())
             drawInfiniteIndicator(canvas);
         else
             drawLoadingIndicator(canvas);
@@ -210,36 +186,6 @@ public class BusyIndicator extends View {
         return (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
     }
 
-    private void readAttributeValues(TypedArray attributes) {
-        isBackgroundVisible = attributes.getBoolean(R.styleable.BusyIndicator_background_is_visible, false);
-        backgroundColor = attributes.getColor(R.styleable.BusyIndicator_background_color, Color.argb(100, 200, 200, 200));
-
-        isPercentageVisible = attributes.getBoolean(R.styleable.BusyIndicator_percentage_is_visible, true);
-
-        int clipShapeIndex = attributes.getInteger(R.styleable.BusyIndicator_background_shape, ClipShape.ROUNDED_RECTANGLE.getIndex());
-        backgroundShape = ClipShape.values()[clipShapeIndex];
-
-        bigPointCount = attributes.getInteger(R.styleable.BusyIndicator_bigpoint_count, 12);
-        if (bigPointCount < 4)
-            bigPointCount = 4;
-        if (bigPointCount > 20)
-            bigPointCount = 20;
-
-        outerItems = new ItemCoordinate[bigPointCount];
-
-        smallPointColor = attributes.getColor(R.styleable.BusyIndicator_smallpoint_color, Color.BLACK);
-        bigPointColor = attributes.getColor(R.styleable.BusyIndicator_bigpoint_color, Color.DKGRAY);
-
-        infinite = attributes.getBoolean(R.styleable.BusyIndicator_infinite, true);
-        maxValue = attributes.getFloat(R.styleable.BusyIndicator_max_value, 100F);
-
-        decimalPlaces = attributes.getInt(R.styleable.BusyIndicator_decimal_places, 0);
-        if (decimalPlaces > 2)
-            decimalPlaces = 2;
-        if (decimalPlaces < 0)
-            decimalPlaces = 0;
-    }
-
     private void drawInfiniteIndicator(Canvas canvas) {
         for (ItemCoordinate item : outerItems) {
             canvas.drawCircle(item.getX(), item.getY(), item.getRadius(), bigPaint);
@@ -257,10 +203,10 @@ public class BusyIndicator extends View {
         canvas.drawCircle(singleFixPoint.getX(), singleFixPoint.getY(), singlePointRadius, singlePaint);
         canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
 
-        if (isPercentageVisible) {
+        if (configSettings.isPercentageVisible()) {
             float v = (100 / maxValue) * currentValue;
 
-            String formatString = decimalPlacesMap.get(decimalPlaces);
+            String formatString = decimalPlacesMap.get(configSettings.getPercentageDecimalPlaces());
             String text = String.format(formatString, v);
             canvas.drawText(text, textPosX, textPosY, textPaint);
         }
@@ -276,8 +222,8 @@ public class BusyIndicator extends View {
         layoutCenterX = getPaddingLeft() + width / 2;
         layoutCenterY = getPaddingTop() + height / 2;
 
-        float slice = 360 / bigPointCount;
-        for (int i = 0; i < bigPointCount; i++) {
+        float slice = 360 / configSettings.getBigPointCount();
+        for (int i = 0; i < configSettings.getBigPointCount(); i++) {
             int angle = (int) (slice * i);
             ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius, bigPointRadius);
             outerItems[i] = itemCoordinate;
@@ -286,7 +232,7 @@ public class BusyIndicator extends View {
         singleRadius = (float) (bigRadius * 0.80);
         singlePointRadius = (float) (singleRadius * 0.05);
 
-        if (infinite) {
+        if (configSettings.isInfinite()) {
             single = getItemCoordinate(INITIAL_SMALL_POSITION, singleRadius, singlePointRadius);
             singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, singleRadius, singlePointRadius);
         } else {
@@ -295,21 +241,21 @@ public class BusyIndicator extends View {
         }
 
         bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bigPaint.setColor(bigPointColor);
+        bigPaint.setColor(configSettings.getBigPointColor());
 
         singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        singlePaint.setColor(smallPointColor);
+        singlePaint.setColor(configSettings.getSmallPointColor());
 
         singlePaintTransparent = new Paint();
         singlePaintTransparent.setAntiAlias(true);
         singlePaintTransparent.setStyle(Paint.Style.STROKE);
         singlePaintTransparent.setStrokeWidth(singlePointRadius * 2);
-        singlePaintTransparent.setColor(smallPointColor);
+        singlePaintTransparent.setColor(configSettings.getSmallPointColor());
         singlePaintTransparent.setAlpha(100);
 
         float textSize = (float) (bigRadius * 0.3);
         textPaint = new Paint();
-        textPaint.setColor(smallPointColor);
+        textPaint.setColor(configSettings.getSmallPointColor());
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.MONOSPACE);
         textPaint.setTextSize(textSize);
@@ -322,14 +268,14 @@ public class BusyIndicator extends View {
     private void initializeCanvas() {
         Bitmap cb = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
         Canvas cv = new Canvas(cb);
-        cv.drawColor(backgroundColor);
-        canvasBackground = getRoundedBitmap(cb, backgroundShape);
+        cv.drawColor(configSettings.getBackgroundColor());
+        canvasBackground = getRoundedBitmap(cb, configSettings.getBackgroundShape());
 
         rect.set(layoutCenterX - bigRadius, layoutCenterY - bigRadius, layoutCenterX + bigRadius, layoutCenterY + bigRadius);
     }
 
     private void calculateInfiniteMoves() {
-        for (int i = 0; i < bigPointCount; i++) {
+        for (int i = 0; i < configSettings.getBigPointCount(); i++) {
             float angle = outerItems[i].getAngle();
             angle += angleModifier;
             if (angle > 360)
