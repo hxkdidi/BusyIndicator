@@ -48,9 +48,10 @@ public class BusyIndicator extends View {
     private ItemCoordinate singleFixPoint;
     private Paint textPaint;
 
-    private Paint strokePaint;
-    private RectF rect;
+    private int smallPointColor;
+    private int bigPointColor;
 
+    private RectF rect = new RectF();
 
     private float layoutCenterX;
     private float layoutCenterY;
@@ -161,7 +162,6 @@ public class BusyIndicator extends View {
 
     private void calculateProgress(float value) {
         if (value > 0){
-
             if (value >= maxValue)
                 value = maxValue;
 
@@ -227,18 +227,8 @@ public class BusyIndicator extends View {
 
         outerItems = new ItemCoordinate[bigPointCount];
 
-        int smallPointColor = attributes.getColor(R.styleable.BusyIndicator_smallpoint_color, Color.BLACK);
-        int bigPointColor = attributes.getColor(R.styleable.BusyIndicator_bigpoint_color, Color.DKGRAY);
-
-        bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bigPaint.setColor(bigPointColor);
-
-        singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        singlePaint.setColor(smallPointColor);
-
-        singlePaintTransparent = new Paint();
-        singlePaintTransparent.setColor(smallPointColor);
-        singlePaintTransparent.setAlpha(100);
+        smallPointColor = attributes.getColor(R.styleable.BusyIndicator_smallpoint_color, Color.BLACK);
+        bigPointColor = attributes.getColor(R.styleable.BusyIndicator_bigpoint_color, Color.DKGRAY);
 
         infinite = attributes.getBoolean(R.styleable.BusyIndicator_infinite, true);
         maxValue = attributes.getFloat(R.styleable.BusyIndicator_max_value, 100F);
@@ -259,9 +249,7 @@ public class BusyIndicator extends View {
     }
 
     private void drawLoadingIndicator(Canvas canvas) {
-        RectF rect = new RectF();
-        rect.set(0, 0, getHeight(), getWidth());
-        canvas.drawArc(rect, 630, arcAngle, true, singlePaintTransparent);
+        canvas.drawArc(rect, 630, arcAngle, false, singlePaintTransparent);
 
         for (ItemCoordinate item : outerItems) {
             canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, bigPaint);
@@ -306,15 +294,29 @@ public class BusyIndicator extends View {
             singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
         }
 
+        bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        bigPaint.setColor(bigPointColor);
+
+        singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        singlePaint.setColor(smallPointColor);
+
+        singlePaintTransparent = new Paint();
+        singlePaintTransparent.setAntiAlias(true);
+        singlePaintTransparent.setStyle(Paint.Style.STROKE);
+        singlePaintTransparent.setStrokeWidth(singlePointRadius * 2);
+        singlePaintTransparent.setColor(smallPointColor);
+        singlePaintTransparent.setAlpha(100);
+
         float textSize = (float) (bigRadius * 0.3);
         textPaint = new Paint();
-        textPaint.setColor(singlePaint.getColor());
+        textPaint.setColor(smallPointColor);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.MONOSPACE);
         textPaint.setTextSize(textSize);
 
         textPosX = layoutCenterX;
         textPosY = layoutCenterX - ((textPaint.descent() + textPaint.ascent()) / 2);
+
     }
 
     private void initializeCanvas() {
@@ -323,18 +325,7 @@ public class BusyIndicator extends View {
         cv.drawColor(backgroundColor);
         canvasBackground = getRoundedBitmap(cb, backgroundShape);
 
-        final int strokeWidth = 40;
-
-        strokePaint = new Paint();
-        strokePaint.setAntiAlias(true);
-        strokePaint.setStyle(Paint.Style.STROKE);
-        strokePaint.setStrokeWidth(strokeWidth);
-        //Circle color
-        strokePaint.setColor(Color.RED);
-
-        //size 200x200 example
-        rect = new RectF(strokeWidth, strokeWidth, 200 + strokeWidth, 200 + strokeWidth);
-
+        rect.set(layoutCenterX - bigRadius, layoutCenterY - bigRadius, layoutCenterX + bigRadius, layoutCenterY + bigRadius);
     }
 
     private void calculateInfiniteMoves() {
