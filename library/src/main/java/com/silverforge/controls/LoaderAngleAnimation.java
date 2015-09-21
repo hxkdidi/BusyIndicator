@@ -24,6 +24,5 @@ public class LoaderAngleAnimation extends Animation {
 
         busyIndicator.setArcAngle(angle);
         busyIndicator.requestLayout();
-
     }
 }
