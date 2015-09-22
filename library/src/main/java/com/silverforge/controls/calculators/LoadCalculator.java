@@ -2,7 +2,7 @@ package com.silverforge.controls.calculators;
 
 import com.silverforge.controls.model.ItemCoordinate;
 
-class LoadCalculator {
+abstract class LoadCalculator {
     protected ItemCoordinate getItemCoordinate(float centerX, float centerY, float angleInDegrees, float radius, float pointRadius) {
         float x = CoordinateCalculator.getXCoordinate(angleInDegrees, centerX, radius);
         float y = CoordinateCalculator.getYCoordinate(angleInDegrees, centerY, radius);

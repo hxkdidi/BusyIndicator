@@ -15,5 +15,4 @@ public class PositionSettings {
     private float bigPointRadius;
     private float singleRadius;
     private float singlePointRadius;
-
 }

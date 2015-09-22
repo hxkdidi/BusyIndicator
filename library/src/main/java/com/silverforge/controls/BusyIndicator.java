@@ -235,11 +235,22 @@ public final class BusyIndicator extends Indicator {
     }
 
     private void drawLoadingIndicator(Canvas canvas) {
-        canvas.drawArc(rect, 630, arcAngle, false, canvasPainter.getSinglePaintTransparent());
-
         for (ItemCoordinate item : finiteLoadCalculator.getOuterItems()) {
-            canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getBigPaint());
+
+            float itemAngle = item.getAngle();
+            if (itemAngle >= 270)
+                itemAngle -= 270;
+            else
+                itemAngle += 90;
+
+            if (itemAngle > arcAngle) {
+                canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getBigPaint());
+            } else {
+                canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getSinglePaint());
+            }
         }
+
+        canvas.drawArc(rect, 630, arcAngle, false, canvasPainter.getSinglePaintTransparent());
 
         if (configSettings.isPercentageVisible()) {
             float v = (100 / maxValue) * currentValue;
