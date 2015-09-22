@@ -1,64 +1,47 @@
 package com.silverforge.controls;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 
-import com.silverforge.library.R;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.silverforge.controls.calculators.CoordinateCalculator;
+import com.silverforge.controls.calculators.FiniteLoadCalculator;
+import com.silverforge.controls.calculators.InfiniteLoadCalculator;
+import com.silverforge.controls.model.ItemCoordinate;
+import com.silverforge.controls.model.PositionSettings;
+import com.silverforge.controls.painters.CanvasPainter;
 
 public class BusyIndicator extends Indicator {
 
     // region private members
-    private final static int INITIAL_SMALL_POSITION = 270;
-
     private boolean firstLoad = true;
 
     private Bitmap canvasBackground;
+    private RectF rect = new RectF();
+
     private float maxValue;
     private float currentValue;
 
-    private Paint bigPaint;
-    private Paint singlePaint;
-    private Paint singlePaintTransparent;
-    private Paint textPaint;
+    private byte angleModifier = 1;
+    private float arcAngle;
 
-    private ItemCoordinate single;
-    private ItemCoordinate singleFixPoint;
-
-    private RectF rect = new RectF();
-
-    private float layoutCenterX;
-    private float layoutCenterY;
-
+    private float layOutCenterX;
+    private float layOutCenterY;
+    private float bigRadius;
+    private float singleRadius;
+    private float singlePointRadius;
     private float textPosX;
     private float textPosY;
 
-    private float bigRadius;
 
-    private float singleRadius;
-    private float singlePointRadius;
-
-    private byte angleModifier = 1;
-
-    private float arcAngle;
-
-    protected ItemCoordinate[] outerItems;
-
+    private CanvasPainter canvasPainter;
+    private InfiniteLoadCalculator infiniteLoadCalculator;
+    private FiniteLoadCalculator finiteLoadCalculator;
     // endregion
 
     public BusyIndicator(Context context) {
@@ -72,7 +55,9 @@ public class BusyIndicator extends Indicator {
     public BusyIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        outerItems = new ItemCoordinate[configSettings.getBigPointCount()];
+        canvasPainter = new CanvasPainter();
+        infiniteLoadCalculator = new InfiniteLoadCalculator();
+        finiteLoadCalculator = new FiniteLoadCalculator();
     }
 
     @Override
@@ -80,8 +65,7 @@ public class BusyIndicator extends Indicator {
         super.onDraw(canvas);
 
         if (firstLoad) {
-            initializePoints();
-            initializeCanvas();
+            initialize();
             firstLoad = false;
         } else {
             if (configSettings.isInfinite())
@@ -136,6 +120,88 @@ public class BusyIndicator extends Indicator {
         arcAngle = aa;
     }
 
+    // region private methods
+
+    private void initialize() {
+        int height = getHeight();
+        int width = getWidth();
+        int paddingLeft = getPaddingLeft();
+        int paddingTop = getPaddingTop();
+
+        CoordinateCalculator coordinateCalculator = new CoordinateCalculator();
+        PositionSettings positionSettings = coordinateCalculator.calculateBasePositions(width, height, paddingLeft, paddingTop);
+        initializeCalculators(positionSettings);
+        initializePaints(positionSettings);
+        initializeTextPositions(positionSettings);
+        initializeCanvas(positionSettings);
+
+        layOutCenterX = positionSettings.getLayOutCenterX();
+        layOutCenterY = positionSettings.getLayOutCenterY();
+        bigRadius = positionSettings.getBigRadius();
+        singleRadius = positionSettings.getSingleRadius();
+        singlePointRadius = positionSettings.getSinglePointRadius();
+    }
+
+    private void initializeCalculators(PositionSettings posSettings) {
+        float layOutCenterX = posSettings.getLayOutCenterX();
+        float layOutCenterY = posSettings.getLayOutCenterY();
+        float bigRadius = posSettings.getBigRadius();
+        float bigPointRadius = posSettings.getBigPointRadius();
+        int bigPointCount = configSettings.getBigPointCount();
+        float singleRadius = posSettings.getSingleRadius();
+        float singlePointRadius = posSettings.getSinglePointRadius();
+
+        if (configSettings.isInfinite()) {
+            infiniteLoadCalculator
+                    .initializeOuterPointPositions(layOutCenterX,
+                            layOutCenterY,
+                            bigRadius,
+                            bigPointRadius,
+                            bigPointCount);
+
+            infiniteLoadCalculator
+                    .initializePointPosition(layOutCenterX,
+                            layOutCenterY,
+                            singleRadius,
+                            singlePointRadius);
+        } else {
+            finiteLoadCalculator
+                    .initializeOuterPointPositions(layOutCenterX,
+                            layOutCenterY,
+                            bigRadius,
+                            singlePointRadius,
+                            bigPointCount);
+        }
+    }
+
+    private void initializePaints(PositionSettings posSettings) {
+        float bigRadius = posSettings.getBigRadius();
+        float singlePointRadius = posSettings.getSinglePointRadius();
+        canvasPainter.initializePaints(configSettings.getBigPointColor(), configSettings.getSmallPointColor(), bigRadius, singlePointRadius);
+    }
+
+    private void initializeTextPositions(PositionSettings posSettings) {
+        float layOutCenterX = posSettings.getLayOutCenterX();
+        float layOutCenterY = posSettings.getLayOutCenterY();
+        float descent = canvasPainter.getTextPaint().descent();
+        float ascent = canvasPainter.getTextPaint().ascent();
+        textPosX = layOutCenterX;
+        textPosY = layOutCenterY - ((descent + ascent) / 2);
+    }
+
+    private void initializeCanvas(PositionSettings posSettings) {
+        Bitmap cb = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(cb);
+        cv.drawColor(configSettings.getBackgroundColor());
+        canvasBackground = canvasPainter.getRoundedBitmap(cb, configSettings.getBackgroundShape());
+
+        float layOutCenterX = posSettings.getLayOutCenterX();
+        float layOutCenterY = posSettings.getLayOutCenterY();
+        float bigRadius = posSettings.getBigRadius();
+
+        rect.set(layOutCenterX - bigRadius, layOutCenterY - bigRadius, layOutCenterX + bigRadius, layOutCenterY + bigRadius);
+    }
+
     private void calculateProgress(float value) {
         if (value > 0){
             if (value >= maxValue)
@@ -145,7 +211,6 @@ public class BusyIndicator extends Indicator {
 
             float currentAngle = (360 / maxValue) * value;
             currentAngle += 270;
-            recalculateItemCoordinate(currentAngle, bigRadius, single);
 
             float aa = (currentAngle - 270);
             LoaderAngleAnimation animation = new LoaderAngleAnimation(this, aa);
@@ -154,188 +219,46 @@ public class BusyIndicator extends Indicator {
         }
     }
 
-    protected ItemCoordinate getItemCoordinate(float angleInDegrees, float radius, float pointRadius) {
-        float x = getXCoordinate(angleInDegrees, radius);
-        float y = getYCoordinate(angleInDegrees, radius);
-
-        ItemCoordinate retValue = new ItemCoordinate();
-        retValue.setX(x);
-        retValue.setY(y);
-        retValue.setAngle(angleInDegrees);
-        retValue.setRadius(pointRadius);
-
-        return retValue;
-    }
-
-    protected void recalculateItemCoordinate(float angleInDegrees, float radius, ItemCoordinate itemCoordinate) {
-        float x = getXCoordinate(angleInDegrees, radius);
-        float y = getYCoordinate(angleInDegrees, radius);
-
-        itemCoordinate.setX(x);
-        itemCoordinate.setY(y);
-        itemCoordinate.setAngle(angleInDegrees);
-    }
-
-    // region private methods
-
-    private float getYCoordinate(float angleInDegrees, float radius) {
-        return (float) ((radius * Math.sin(angleInDegrees * Math.PI / 180F)) + layoutCenterY);
-    }
-
-    private float getXCoordinate(float angleInDegrees, float radius) {
-        return (float) ((radius * Math.cos(angleInDegrees * Math.PI / 180F)) + layoutCenterX);
-    }
-
     private void drawInfiniteIndicator(Canvas canvas) {
-        for (ItemCoordinate item : outerItems) {
+        // draw outer points
+        Paint bigPaint = canvasPainter.getBigPaint();
+        for (ItemCoordinate item : infiniteLoadCalculator.getOuterItems()) {
             canvas.drawCircle(item.getX(), item.getY(), item.getRadius(), bigPaint);
         }
-        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
+
+        // draw inner point
+        ItemCoordinate innerItem = infiniteLoadCalculator.getInnerItem();
+        Paint singlePaint = canvasPainter.getSinglePaint();
+
+        canvas.drawCircle(innerItem.getX(), innerItem.getY(), singlePointRadius, singlePaint);
+
         invalidate();
     }
 
     private void drawLoadingIndicator(Canvas canvas) {
-        canvas.drawArc(rect, 630, arcAngle, false, singlePaintTransparent);
+        canvas.drawArc(rect, 630, arcAngle, false, canvasPainter.getSinglePaintTransparent());
 
-        for (ItemCoordinate item : outerItems) {
-            canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, bigPaint);
+        for (ItemCoordinate item : finiteLoadCalculator.getOuterItems()) {
+            canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getBigPaint());
         }
-        canvas.drawCircle(singleFixPoint.getX(), singleFixPoint.getY(), singlePointRadius, singlePaint);
-        canvas.drawCircle(single.getX(), single.getY(), singlePointRadius, singlePaint);
 
         if (configSettings.isPercentageVisible()) {
             float v = (100 / maxValue) * currentValue;
 
             String formatString = decimalPlacesMap.get(configSettings.getPercentageDecimalPlaces());
             String text = String.format(formatString, v);
-            canvas.drawText(text, textPosX, textPosY, textPaint);
+
+            float descent = canvasPainter.getTextPaint().descent();
+            float ascent = canvasPainter.getTextPaint().ascent();
+
+            textPosY = layOutCenterY - ((descent + ascent) / 2);
+            canvas.drawText(text, textPosX, textPosY, canvasPainter.getTextPaint());
         }
-    }
-
-    private void initializePoints() {
-        int height = getHeight();
-        int width = getWidth();
-        bigRadius = height > width ? width /2 : height / 2;
-        bigRadius = (float)(bigRadius * 0.75);
-        float bigPointRadius = (float) (bigRadius * 0.15);
-
-        layoutCenterX = getPaddingLeft() + width / 2;
-        layoutCenterY = getPaddingTop() + height / 2;
-
-        float slice = 360 / configSettings.getBigPointCount();
-        for (int i = 0; i < configSettings.getBigPointCount(); i++) {
-            int angle = (int) (slice * i);
-            ItemCoordinate itemCoordinate = getItemCoordinate(angle, bigRadius, bigPointRadius);
-            outerItems[i] = itemCoordinate;
-        }
-
-        singleRadius = (float) (bigRadius * 0.80);
-        singlePointRadius = (float) (singleRadius * 0.05);
-
-        if (configSettings.isInfinite()) {
-            single = getItemCoordinate(INITIAL_SMALL_POSITION, singleRadius, singlePointRadius);
-            singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, singleRadius, singlePointRadius);
-        } else {
-            single = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
-            singleFixPoint = getItemCoordinate(INITIAL_SMALL_POSITION, bigRadius, singlePointRadius);
-        }
-
-        bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        bigPaint.setColor(configSettings.getBigPointColor());
-
-        singlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        singlePaint.setColor(configSettings.getSmallPointColor());
-
-        singlePaintTransparent = new Paint();
-        singlePaintTransparent.setAntiAlias(true);
-        singlePaintTransparent.setStyle(Paint.Style.STROKE);
-        singlePaintTransparent.setStrokeWidth(singlePointRadius * 2);
-        singlePaintTransparent.setColor(configSettings.getSmallPointColor());
-        singlePaintTransparent.setAlpha(100);
-
-        float textSize = (float) (bigRadius * 0.3);
-        textPaint = new Paint();
-        textPaint.setColor(configSettings.getSmallPointColor());
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTypeface(Typeface.MONOSPACE);
-        textPaint.setTextSize(textSize);
-
-        textPosX = layoutCenterX;
-        textPosY = layoutCenterX - ((textPaint.descent() + textPaint.ascent()) / 2);
-
-    }
-
-    private void initializeCanvas() {
-        Bitmap cb = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas cv = new Canvas(cb);
-        cv.drawColor(configSettings.getBackgroundColor());
-        canvasBackground = getRoundedBitmap(cb, configSettings.getBackgroundShape());
-
-        rect.set(layoutCenterX - bigRadius, layoutCenterY - bigRadius, layoutCenterX + bigRadius, layoutCenterY + bigRadius);
     }
 
     private void calculateInfiniteMoves() {
-        for (int i = 0; i < configSettings.getBigPointCount(); i++) {
-            float angle = outerItems[i].getAngle();
-            angle += angleModifier;
-            if (angle > 360)
-                angle = angle - 360;
-
-            recalculateItemCoordinate(angle, bigRadius, outerItems[i]);
-        }
-
-        float singleAngle = single.getAngle();
-        singleAngle -= angleModifier;
-        if (singleAngle < 0)
-            singleAngle = singleAngle + 360;
-
-        recalculateItemCoordinate(singleAngle, singleRadius, single);
-    }
-
-    private Bitmap getRoundedBitmap(Bitmap bitmap, ClipShape clipShape) {
-        int zeroIntValue = 0;
-
-        Bitmap resultBitmap;
-        int originalWidth = bitmap.getWidth();
-        int originalHeight = bitmap.getHeight();
-        float r;
-
-        int size;
-        if (originalWidth > originalHeight) {
-            size = originalHeight;
-            resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-            r = originalHeight / 2;
-        } else {
-            size = originalWidth;
-            resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
-            r = originalWidth / 2;
-        }
-
-        Canvas canvas = new Canvas(resultBitmap);
-
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(zeroIntValue,
-                zeroIntValue, originalWidth, originalHeight);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(zeroIntValue, zeroIntValue,
-                zeroIntValue, zeroIntValue);
-
-        switch (clipShape) {
-            case ROUNDED_RECTANGLE:
-                RectF rectF = new RectF(rect);
-                float cornerRadius = 32.0f;
-                canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paint);
-                break;
-            case CIRCLE:
-                canvas.drawCircle(r, r, r, paint);
-                break;
-        }
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        return resultBitmap;
+        infiniteLoadCalculator.recalculateOuterPointPositions(layOutCenterX, layOutCenterY, angleModifier, bigRadius);
+        infiniteLoadCalculator.recalculatePointPosition(layOutCenterX, layOutCenterY, angleModifier, singleRadius);
     }
 
     // endregion

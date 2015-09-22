@@ -6,7 +6,8 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.silverforge.controls.Model.ConfigSettings;
+import com.silverforge.controls.model.ClipShape;
+import com.silverforge.controls.model.ConfigSettings;
 import com.silverforge.library.R;
 
 import java.util.HashMap;
@@ -87,5 +88,4 @@ class Indicator extends View {
 
         return configSettings;
     }
-
 }

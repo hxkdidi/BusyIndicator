@@ -1,4 +1,4 @@
-package com.silverforge.controls;
+package com.silverforge.controls.model;
 
 public enum ClipShape {
     ROUNDED_RECTANGLE(0),
