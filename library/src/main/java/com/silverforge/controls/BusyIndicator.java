@@ -16,9 +16,8 @@ import com.silverforge.controls.model.ItemCoordinate;
 import com.silverforge.controls.model.PositionSettings;
 import com.silverforge.controls.painters.CanvasPainter;
 
-public class BusyIndicator extends Indicator {
+public final class BusyIndicator extends Indicator {
 
-    // region private members
     private boolean firstLoad = true;
 
     private Bitmap canvasBackground;
@@ -38,11 +37,10 @@ public class BusyIndicator extends Indicator {
     private float textPosX;
     private float textPosY;
 
-
     private CanvasPainter canvasPainter;
     private InfiniteLoadCalculator infiniteLoadCalculator;
     private FiniteLoadCalculator finiteLoadCalculator;
-    // endregion
+
 
     public BusyIndicator(Context context) {
         this(context, null);
@@ -59,6 +57,7 @@ public class BusyIndicator extends Indicator {
         infiniteLoadCalculator = new InfiniteLoadCalculator();
         finiteLoadCalculator = new FiniteLoadCalculator();
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -112,6 +111,7 @@ public class BusyIndicator extends Indicator {
         calculateProgress((float)value);
     }
 
+
     float getArcAngle() {
         return arcAngle;
     }
@@ -120,7 +120,6 @@ public class BusyIndicator extends Indicator {
         arcAngle = aa;
     }
 
-    // region private methods
 
     private void initialize() {
         int height = getHeight();
@@ -260,6 +259,4 @@ public class BusyIndicator extends Indicator {
         infiniteLoadCalculator.recalculateOuterPointPositions(layOutCenterX, layOutCenterY, angleModifier, bigRadius);
         infiniteLoadCalculator.recalculatePointPosition(layOutCenterX, layOutCenterY, angleModifier, singleRadius);
     }
-
-    // endregion
 }

@@ -69,7 +69,7 @@ class Indicator extends View {
         boolean infinite = attributes.getBoolean(R.styleable.BusyIndicator_infinite, true);
         float maxValue = attributes.getFloat(R.styleable.BusyIndicator_max_value, 100F);
 
-        int decimalPlaces = attributes.getInt(R.styleable.BusyIndicator_decimal_places, 0);
+        int decimalPlaces = attributes.getInt(R.styleable.BusyIndicator_percentage_decimal_places, 0);
         if (decimalPlaces > 2)
             decimalPlaces = 2;
         if (decimalPlaces < 0)
