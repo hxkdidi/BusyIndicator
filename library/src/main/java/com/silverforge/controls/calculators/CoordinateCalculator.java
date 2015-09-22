@@ -8,13 +8,13 @@ public class CoordinateCalculator {
         PositionSettings positionSettings = new PositionSettings();
 
         float bigRadius = height > width ? width /2 : height / 2;
-        bigRadius = (float)(bigRadius * 0.75);
+        bigRadius = (float)(bigRadius * 0.8);
         float bigPointRadius = (float) (bigRadius * 0.15);
 
         float layoutCenterX = paddingLeft + width / 2;
         float layoutCenterY = paddingTop + height / 2;
 
-        float singleRadius = (float) (bigRadius * 0.80);
+        float singleRadius = (float) (bigRadius * 0.75);
         float singlePointRadius = (float) (singleRadius * 0.05);
 
         positionSettings.setWidth(width);

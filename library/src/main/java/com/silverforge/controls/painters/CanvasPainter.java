@@ -29,7 +29,7 @@ public class CanvasPainter {
 
     public void initializePaints(int outerPointColor, int innerPointColor, float outerpointRadius, float innerpointRadius) {
 
-        float strokeWidth = innerpointRadius * 2;
+        float strokeWidth = innerpointRadius * 6;
 
         bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bigPaint.setColor(outerPointColor);
@@ -44,7 +44,7 @@ public class CanvasPainter {
         singlePaintTransparent.setColor(innerPointColor);
         singlePaintTransparent.setAlpha(100);
 
-        float textSize = (float) (outerpointRadius * 0.3);
+        float textSize = (float) (outerpointRadius * 0.4);
         textPaint = new Paint();
         textPaint.setColor(innerPointColor);
         textPaint.setTextAlign(Paint.Align.CENTER);

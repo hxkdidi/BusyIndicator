@@ -263,6 +263,7 @@ public final class BusyIndicator extends Indicator {
                 itemAngle += 90;
 
             if (itemAngle > arcAngle) {
+                canvasPainter.getBigPaint().setAlpha(100);
                 canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getBigPaint());
             } else {
                 canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getSinglePaint());

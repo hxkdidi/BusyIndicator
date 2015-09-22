@@ -21,7 +21,7 @@
         app:percentage_is_visible="true"
         app:bigpoint_color="@color/bigpoint_large"
         app:smallpoint_color="@color/smallpoint_large"
-        app:percentage_decimal_places="1"
+        app:percentage_decimal_places="2"
         android:layout_width="300dp"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
