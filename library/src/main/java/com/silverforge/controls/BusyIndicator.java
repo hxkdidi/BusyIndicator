@@ -28,6 +28,7 @@ public final class BusyIndicator extends Indicator {
 
     private byte angleModifier = 1;
     private float arcAngle;
+    private int textAlpha;
 
     private float layOutCenterX;
     private float layOutCenterY;
@@ -118,6 +119,14 @@ public final class BusyIndicator extends Indicator {
 
     void setArcAngle(float aa) {
         arcAngle = aa;
+    }
+
+    int getTextAlpha() {
+        return textAlpha;
+    }
+
+    void setTextAlpha(int ta) {
+        textAlpha = ta;
     }
 
 
@@ -212,9 +221,9 @@ public final class BusyIndicator extends Indicator {
             currentAngle += 270;
 
             float aa = (currentAngle - 270);
-            LoaderAngleAnimation animation = new LoaderAngleAnimation(this, aa);
-            animation.setDuration(300);
-            this.startAnimation(animation);
+            LoaderAngleAnimation angleAnimation = new LoaderAngleAnimation(this, aa);
+            angleAnimation.setDuration(300);
+            this.startAnimation(angleAnimation);
         }
     }
 
@@ -235,6 +244,8 @@ public final class BusyIndicator extends Indicator {
     }
 
     private void drawLoadingIndicator(Canvas canvas) {
+        canvas.drawArc(rect, 630, arcAngle, false, canvasPainter.getSinglePaintTransparent());
+
         for (ItemCoordinate item : finiteLoadCalculator.getOuterItems()) {
 
             float itemAngle = item.getAngle();
@@ -250,8 +261,6 @@ public final class BusyIndicator extends Indicator {
             }
         }
 
-        canvas.drawArc(rect, 630, arcAngle, false, canvasPainter.getSinglePaintTransparent());
-
         if (configSettings.isPercentageVisible()) {
             float v = (100 / maxValue) * currentValue;
 
@@ -262,6 +271,8 @@ public final class BusyIndicator extends Indicator {
             float ascent = canvasPainter.getTextPaint().ascent();
 
             textPosY = layOutCenterY - ((descent + ascent) / 2);
+
+            canvasPainter.getTextPaint().setAlpha(textAlpha);
             canvas.drawText(text, textPosX, textPosY, canvasPainter.getTextPaint());
         }
     }
