@@ -8,6 +8,7 @@ import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.animation.AnimationSet;
 
 import com.silverforge.controls.calculators.CoordinateCalculator;
 import com.silverforge.controls.calculators.FiniteLoadCalculator;
@@ -223,7 +224,14 @@ public final class BusyIndicator extends Indicator {
             float aa = (currentAngle - 270);
             LoaderAngleAnimation angleAnimation = new LoaderAngleAnimation(this, aa);
             angleAnimation.setDuration(300);
-            this.startAnimation(angleAnimation);
+
+            LoaderTextAnimation textAnimation = new LoaderTextAnimation(this);
+            textAnimation.setDuration(300);
+
+            AnimationSet animationSet = new AnimationSet(false);
+            animationSet.addAnimation(angleAnimation);
+            animationSet.addAnimation(textAnimation);
+            this.startAnimation(animationSet);
         }
     }
 
