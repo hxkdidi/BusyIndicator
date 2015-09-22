@@ -29,7 +29,7 @@ public class CanvasPainter {
 
     public void initializePaints(int outerPointColor, int innerPointColor, float outerpointRadius, float innerpointRadius) {
 
-        float strokeWidth = (float) (innerpointRadius * 2.3);
+        float strokeWidth = innerpointRadius * 2;
 
         bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bigPaint.setColor(outerPointColor);
