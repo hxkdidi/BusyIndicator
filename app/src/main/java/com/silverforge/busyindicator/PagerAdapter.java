@@ -17,11 +17,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                DarkRectangleFragment darkRectangleFragment = new DarkRectangleFragment();
-                return darkRectangleFragment;
+                RectangleFragment rectangleFragment = new RectangleFragment();
+                return rectangleFragment;
             case 1:
-                DarkCircleFragment darkCircleFragment = new DarkCircleFragment();
-                return darkCircleFragment;
+                CircleFragment circleFragment = new CircleFragment();
+                return circleFragment;
             default:
                 return null;
         }

@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 
 import com.silverforge.controls.BusyIndicator;
 
-public class DarkCircleFragment extends Fragment {
+public class CircleFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dark_circle, container, false);
+        View view = inflater.inflate(R.layout.fragment_circle, container, false);
         BusyIndicator circleBusyIndicator = (BusyIndicator) view.findViewById(R.id.finiteCircleBusyIndicator);
 
         circleBusyIndicator.setMaxValue(102);

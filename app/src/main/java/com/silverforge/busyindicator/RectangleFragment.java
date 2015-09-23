@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 
 import com.silverforge.controls.BusyIndicator;
 
-public class DarkRectangleFragment extends Fragment {
+public class RectangleFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dark_rectangle, container, false);
+        View view = inflater.inflate(R.layout.fragment_rectangle, container, false);
         BusyIndicator busyIndicator = (BusyIndicator) view.findViewById(R.id.finiteRectangleBusyIndicator);
 
         busyIndicator.setMaxValue(102);
