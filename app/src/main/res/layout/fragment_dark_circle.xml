@@ -18,7 +18,7 @@
             app:bigpoint_color="@color/bigpoint_large"
             app:smallpoint_color="@color/smallpoint_large"
 
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
             />
@@ -38,7 +38,7 @@
             app:percentage_is_visible="true"
             app:percentage_decimal_places="1"
 
-            android:layout_width="150dp"
+            android:layout_width="300dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
             />
