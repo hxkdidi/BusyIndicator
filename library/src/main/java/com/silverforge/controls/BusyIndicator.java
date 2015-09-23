@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AnimationSet;
+import android.widget.TextView;
 
 import com.silverforge.controls.calculators.CoordinateCalculator;
 import com.silverforge.controls.calculators.FiniteLoadCalculator;

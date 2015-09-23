@@ -14,9 +14,11 @@ public class LoaderTextAnimation extends Animation {
     protected void applyTransformation(float interpolatedTime, Transformation t) {
         super.applyTransformation(interpolatedTime, t);
 
-        int newAlpha = (int) (127 * interpolatedTime);
-        busyIndicator.setTextAlpha(newAlpha - 127);
-        busyIndicator.setTextAlpha(127 + newAlpha);
+        int alphaModifier = 127;
+
+        int newAlpha = (int) (alphaModifier * interpolatedTime);
+        busyIndicator.setTextAlpha(newAlpha - alphaModifier);
+        busyIndicator.setTextAlpha(alphaModifier + newAlpha);
 
         busyIndicator.requestLayout();
     }
