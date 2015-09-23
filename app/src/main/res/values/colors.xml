@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="bigpoint_large">#FF487416</color>
-    <color name="smallpoint_large">#FF554C02</color>
+    <color name="bigpoint_large">#FFFAFDD1</color>
+    <color name="smallpoint_large">#FF8B7AAE</color>
 
-    <color name="bigpoint_medium">#FF532B72</color>
-    <color name="smallpoint_medium">#FF41002C</color>
+    <color name="bigpoint_medium">#FF334F00</color>
+    <color name="smallpoint_medium">#FF401255</color>
 
     <color name="bigpoint_small">#FFD4AA6A</color>
     <color name="smallpoint_small">#FF801515</color>
 
-    <color name="busy_background_large">#55D4D36A</color>
+    <color name="busy_background_large">#FF2F2800</color>
+    <color name="busy_background_medium">#33806E15</color>
 </resources>

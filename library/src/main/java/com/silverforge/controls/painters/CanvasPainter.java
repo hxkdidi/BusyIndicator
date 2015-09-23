@@ -54,14 +54,26 @@ public class CanvasPainter {
 
 
     public Bitmap getRoundedBitmap(Bitmap bitmap, ClipShape clipShape) {
-        int zeroIntValue = 0;
+        Bitmap retValue = null;
+        switch (clipShape) {
+            case ROUNDED_RECTANGLE:
+                retValue = prepareRectangleBitmap(bitmap);
+                break;
+            case CIRCLE:
+                retValue = prepareCircleBitmap(bitmap);
+                break;
+        }
+        return retValue;
+    }
 
+    private Bitmap prepareCircleBitmap(Bitmap bitmap) {
+        int zeroIntValue = 0;
         Bitmap resultBitmap;
         int originalWidth = bitmap.getWidth();
         int originalHeight = bitmap.getHeight();
         float r;
-
         int size;
+
         if (originalWidth > originalHeight) {
             size = originalHeight;
             resultBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
@@ -73,25 +85,38 @@ public class CanvasPainter {
         }
 
         Canvas canvas = new Canvas(resultBitmap);
-
         final Paint paint = new Paint();
-        final Rect rect = new Rect(zeroIntValue,
-                zeroIntValue, originalWidth, originalHeight);
+        final Rect rect = new Rect(zeroIntValue, zeroIntValue, originalWidth, originalHeight);
 
         paint.setAntiAlias(true);
-        canvas.drawARGB(zeroIntValue, zeroIntValue,
-                zeroIntValue, zeroIntValue);
+        canvas.drawARGB(zeroIntValue, zeroIntValue, zeroIntValue, zeroIntValue);
 
-        switch (clipShape) {
-            case ROUNDED_RECTANGLE:
-                RectF rectF = new RectF(rect);
-                float cornerRadius = 32.0f;
-                canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paint);
-                break;
-            case CIRCLE:
-                canvas.drawCircle(r, r, r, paint);
-                break;
-        }
+        canvas.drawCircle(r, r, r, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return resultBitmap;
+    }
+
+    private Bitmap prepareRectangleBitmap(Bitmap bitmap) {
+        int zeroIntValue = 0;
+        int originalWidth = bitmap.getWidth();
+        int originalHeight = bitmap.getHeight();
+        Bitmap resultBitmap;
+
+        resultBitmap = Bitmap.createBitmap(originalWidth, originalHeight, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(resultBitmap);
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(zeroIntValue, zeroIntValue, originalWidth, originalHeight);
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(zeroIntValue, zeroIntValue, zeroIntValue, zeroIntValue);
+
+        RectF rectF = new RectF(rect);
+        float cornerRadius = 32.0f;
+        canvas.drawRoundRect(rectF, cornerRadius, cornerRadius, paint);
 
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);

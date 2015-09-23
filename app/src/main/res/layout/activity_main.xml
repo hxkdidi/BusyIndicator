@@ -14,36 +14,32 @@
 
     <com.silverforge.controls.BusyIndicator
         app:background_is_visible="true"
+        app:background_color="@color/busy_background_large"
         app:bigpoint_color="@color/bigpoint_large"
         app:smallpoint_color="@color/smallpoint_large"
+
         android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        />
 
     <com.silverforge.controls.BusyIndicator
         android:id="@+id/finiteBusyIndicator"
-        app:infinite="false"
+
+        app:background_is_visible="true"
+        app:background_shape="rounded_rectangle"
+        app:background_color="@color/busy_background_large"
+        app:bigpoint_color="@color/bigpoint_large"
+        app:smallpoint_color="@color/smallpoint_large"
         app:bigpoint_count="20"
+        
+        app:infinite="false"
         app:max_value="100"
         app:percentage_is_visible="true"
         app:percentage_decimal_places="1"
-        app:bigpoint_color="@color/bigpoint_medium"
-        app:smallpoint_color="@color/smallpoint_medium"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        app:background_is_visible="true"
-        app:background_color="@color/busy_background_large"
-        app:background_shape="circle"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
 
-    <com.silverforge.controls.BusyIndicator
-        app:bigpoint_count="12"
-        app:bigpoint_color="@color/bigpoint_small"
-        app:smallpoint_color="@color/smallpoint_small"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_margin="10dp"
+        />
 </LinearLayout>
