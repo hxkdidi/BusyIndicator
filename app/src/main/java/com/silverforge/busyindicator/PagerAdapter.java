@@ -22,6 +22,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 1:
                 CircleFragment circleFragment = new CircleFragment();
                 return circleFragment;
+            case 2:
+                TransFragment transFragment = new TransFragment();
+                return transFragment;
             default:
                 return null;
         }
