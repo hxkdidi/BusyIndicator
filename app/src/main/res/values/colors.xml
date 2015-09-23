@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary_app">#FF000000</color>
+    <color name="primary_dark_app">#FF000000</color>
+    <color name="accent_app">#FFDD0000</color>
+
     <color name="bigpoint_large">#FFFAFDD1</color>
     <color name="smallpoint_large">#FF8B7AAE</color>
 

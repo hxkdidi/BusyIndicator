@@ -1,45 +1,53 @@
-<LinearLayout
+<!--<LinearLayout-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:orientation="vertical"-->
+    <!--android:gravity="center"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:paddingLeft="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingRight="@dimen/activity_horizontal_margin"-->
+    <!--android:paddingTop="@dimen/activity_vertical_margin"-->
+    <!--android:paddingBottom="@dimen/activity_vertical_margin"-->
+    <!--tools:context=".MainActivity">-->
+
+<!--</LinearLayout>-->
+
+<RelativeLayout
+    android:id="@+id/main_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".MainActivity">
 
-    <com.silverforge.controls.BusyIndicator
-        app:background_is_visible="true"
-        app:background_color="@color/busy_background_large"
-        app:bigpoint_color="@color/bigpoint_large"
-        app:smallpoint_color="@color/smallpoint_large"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-        android:layout_width="300dp"
-        android:layout_height="150dp"
-        android:layout_margin="10dp"
-        />
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="?attr/colorPrimary"
+        android:elevation="6dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
-    <com.silverforge.controls.BusyIndicator
-        android:id="@+id/finiteBusyIndicator"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/tab_layout"/>
 
-        app:background_is_visible="true"
-        app:background_shape="rounded_rectangle"
-        app:background_color="@color/busy_background_large"
-        app:bigpoint_color="@color/bigpoint_large"
-        app:smallpoint_color="@color/smallpoint_large"
-        app:bigpoint_count="20"
-        
-        app:infinite="false"
-        app:max_value="100"
-        app:percentage_is_visible="true"
-        app:percentage_decimal_places="1"
-
-        android:layout_width="300dp"
-        android:layout_height="150dp"
-        android:layout_margin="10dp"
-        />
-</LinearLayout>
+</RelativeLayout>

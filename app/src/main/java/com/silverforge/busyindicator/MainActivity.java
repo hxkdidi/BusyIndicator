@@ -1,12 +1,15 @@
 package com.silverforge.busyindicator;
 
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.silverforge.controls.BusyIndicator;
+
 
 public class MainActivity extends AppCompatActivity {
     private BusyIndicator busyIndicator;
@@ -15,11 +18,35 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        busyIndicator = (BusyIndicator) findViewById(R.id.finiteBusyIndicator);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.addTab(tabLayout.newTab().setText("Rectangle"));
+        tabLayout.addTab(tabLayout.newTab().setText("Circle"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        busyIndicator.setMaxValue(102);
-        new BusyIndicatorAsyncTask().execute();
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     @Override
@@ -44,27 +71,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    class BusyIndicatorAsyncTask extends AsyncTask {
-        @Override
-        protected Object doInBackground(Object[] params) {
-
-            for (int i = 0; i <= 102; i += 3) {
-                final int a = i;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        busyIndicator.setValue(a);
-                    }
-                });
-
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return null;
-        }
-    }
 }
