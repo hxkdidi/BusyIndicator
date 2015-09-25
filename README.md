@@ -169,8 +169,9 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
 
 Basically just set the *maxValue()* of busyIndicator and after that set the current value via *setValue()* frequently like the *// NOTE* indicates in the code below.
 
-*Note : You can set the maxValue with xml attribute as well with* **app:max_value="100"**
+*Note : You can set the maxValue with xml attribute as well like* **app:max_value="756"**
 
+For example if you have a progress from 0 to 756, you just set *maxValue()* to 756 and via *setValue()* inform the busyIndicator about the progress. BusyIndicator will do the percentage calculations.
 
 ```java
         busyIndicator = (BusyIndicator) findViewById(R.id.finiteBusyIndicator);
