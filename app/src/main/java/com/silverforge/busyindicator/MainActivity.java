@@ -10,7 +10,6 @@ import android.view.MenuItem;
 
 import com.silverforge.controls.BusyIndicator;
 
-
 public class MainActivity extends AppCompatActivity {
     private BusyIndicator busyIndicator;
 
