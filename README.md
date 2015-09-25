@@ -14,6 +14,8 @@ Contents
 
 The BusyIndicator is a progress indicator with determined and indeterminate state. 
 
+[![BusyIndicatorDemo](https://j.gifs.com/KRoYzb.gif)](https://youtu.be/rOqh9h-DEDw)
+
 ## How do I get set up? ##
 
 Soon...
@@ -28,9 +30,6 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
 #### Dark rectangle background ####
 
 ###### Busy indicator ######
-
-[![BusyIndicatorDemo](https://j.gifs.com/KRoYzb.gif)](https://youtu.be/rOqh9h-DEDw)
-
 
 ```xml
 <com.silverforge.controls.BusyIndicator
@@ -68,13 +67,6 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
     android:layout_margin="10dp"
     />
 ```
-
-###### UI ######
-
-![DarkRect](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect.png)
-
-![DarkRectFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_full.png)
-
 
 #### Light circle background ####
 
@@ -118,13 +110,6 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
     />
 ```
 
-###### UI ######
-
-![LightCircle](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle.png)
-
-![LightCircleFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_full.png)
-
-
 #### Transparent background ####
 
 ###### Busy indicator ######
@@ -160,13 +145,6 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
     android:layout_margin="10dp"
     />
 ```
-
-###### UI ######
-
-![Trans](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans.png)
-
-![TransFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans_full.png)
-
 
 #### How to control progress indicator from code #####
 
@@ -214,5 +192,18 @@ For example if you have a progress from 0 to 756, you just set *maxValue()* to 7
 ```
 
 
+###### UI ######
+
+![DarkRect](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect.png)
+
+![DarkRectFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_full.png)
+
+![LightCircle](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle.png)
+
+![LightCircleFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_full.png)
+
+![Trans](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans.png)
+
+![TransFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans_full.png)
 
 
