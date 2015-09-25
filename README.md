@@ -29,7 +29,7 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
 
 ###### Busy indicator ######
 
-[![BusyIndicatorDemo](https://gifs.com/gif/KRoYzb)](https://youtu.be/rOqh9h-DEDw)
+[![BusyIndicatorDemo](https://j.gifs.com/KRoYzb.gif)](https://youtu.be/rOqh9h-DEDw)
 
 
 ```xml
