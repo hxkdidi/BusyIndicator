@@ -12,7 +12,7 @@ Contents
 
 ## What is this repository for? ##
 
-The BusyIndicator is a progress indicator with finite and infinite state.
+The BusyIndicator is a progress indicator with determined and indeterminate state. 
 
 ## How do I get set up? ##
 
@@ -28,6 +28,9 @@ Please do not hesitate to raise any issue you find related to ElasticRawClient [
 #### Dark rectangle background ####
 
 ###### Busy indicator ######
+
+[![BusyIndicatorDemo](https://gifs.com/gif/KRoYzb)](https://youtu.be/rOqh9h-DEDw)
+
 
 ```xml
 <com.silverforge.controls.BusyIndicator
