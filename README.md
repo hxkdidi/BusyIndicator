@@ -18,14 +18,40 @@ The BusyIndicator is a progress indicator with determined and indeterminate stat
 
 ## How do I get set up? ##
 
-Soon...
+```groovy
+dependencies {
 
+...
+
+    compile 'com.silverforge.controls:busyindicator:1.0.0'
+}
+
+```
 
 ##### Issues/contact #####
 
 Please do not hesitate to raise any issue you find related to ElasticRawClient [here](https://github.com/silverforge/ElasticRawClient/issues)
 
 ## Configuration ##
+
+You can control the busyindicator behavior or look & feel with the following attributes:
+
+###### Indeterminate ######
+* **bigpoint_color** - The foreground color of the points (circles) on outer radius. By default it is gray.
+* **smallpoint_color** - The foreground color of the point (circle) on the inner radius. By default it is black.
+* **bigpoint_count** - The count of points (circles) on outer radius. By default it is 4.
+* **background_is_visible** - *true* of *false*. If true you have a light gray rectangle background with rounded corner by default .
+* **background_color** - The background color if visible. By default it is light gray.
+* **background_shape** - *rounded_rectangle* or *circle* The shape of background.
+
+###### Determined ######
+
+All of the attributes mentioned in previous section plus
+
+* **infinite** - *true* of *false*. If true the busyindicator is active otherwise the load indicator is active.
+* **percentage_is_visible** - *true* of *false*. If true the percentage text appears.
+* **percentage_decimal_places** - Could be : [0, 1, 2]. The decimal places of the percentage text.
+* **max_value** - The max value of the progress. 
 
 #### Dark rectangle background ####
 
