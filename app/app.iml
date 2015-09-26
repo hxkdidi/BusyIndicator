@@ -97,6 +97,6 @@
     <orderEntry type="library" exported="" name="lombok-1.16.6" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.1" level="project" />
-    <orderEntry type="module" module-name="library" exported="" />
+    <orderEntry type="module" module-name="busyindicator" exported="" />
   </component>
 </module>
