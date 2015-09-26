@@ -32,7 +32,7 @@ dependencies {
 
 ##### Issues/contact #####
 
-Please do not hesitate to raise any issue you find related to ElasticRawClient [here](https://github.com/silverforge/ElasticRawClient/issues)
+Please do not hesitate to raise any issue you find related to ElasticRawClient [here](https://github.com/silverforge/BusyIndicator/issues)
 
 ## Configuration ##
 
