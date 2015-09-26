@@ -14,6 +14,8 @@ Contents
 
 The BusyIndicator is a progress indicator with determined and indeterminate state. 
 
+Current version is [![Download](https://api.bintray.com/packages/silverforge/maven/busyindicator/images/download.svg) ](https://bintray.com/silverforge/maven/busyindicator/_latestVersion)
+
 [![BusyIndicatorDemo](https://j.gifs.com/KRoYzb.gif)](https://youtu.be/rOqh9h-DEDw)
 
 ## How do I get set up? ##
