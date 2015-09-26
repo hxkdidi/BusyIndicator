@@ -5,6 +5,9 @@ apply plugin: 'com.jfrog.bintray'
 
 // This is the library version used when deploying the artifact
 version = "1.0.0"
+//groupId = "com.silverforge.controls"
+//artifactId = "busyindicator"
+
 
 android {
     compileSdkVersion 22
@@ -41,6 +44,7 @@ install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
         pom {
+            artifactId = "busyindicator"
             project {
                 packaging 'aar'
 
@@ -79,6 +83,7 @@ task sourcesJar(type: Jar) {
 }
 
 artifacts {
+
     archives sourcesJar
 }
 
