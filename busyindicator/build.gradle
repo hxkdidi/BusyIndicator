@@ -5,9 +5,6 @@ apply plugin: 'com.jfrog.bintray'
 
 // This is the library version used when deploying the artifact
 version = "1.0.0"
-//groupId = "com.silverforge.controls"
-//artifactId = "busyindicator"
-
 
 android {
     compileSdkVersion 22
