@@ -7,6 +7,7 @@ Contents
 
 - [What is this repository for?](#what-is-this-repository-for)
 - [How do I get set up?](#how-do-i-get-set-up)
+- [License](#license)
 - [Configuration](#configuration)
 
 
