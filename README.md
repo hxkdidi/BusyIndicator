@@ -1,6 +1,7 @@
 
 # README #
 
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BusyIndicator-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2560)
 
 Contents
 --------
@@ -244,16 +245,15 @@ For example if you have a progress from 0 to 756, you just set *maxValue()* to 7
 
 ###### UI ######
 
-![DarkRect](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect.png)
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect.png" alt="DarkRect" style="width: 425px; height: 756px;"/>
 
-![DarkRectFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_full.png)
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_full.png" alt="DarkRectFull" style="width: 425px; height: 756px;"/>
 
-![LightCircle](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle.png)
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle.png" alt="LightCircle" style="width: 425px; height: 756px;"/>
 
-![LightCircleFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_full.png)
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_full.png" alt="LightCircleFull" style="width: 425px; height: 756px;"/>
 
-![Trans](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans.png)
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans.png" alt="Trans" style="width: 425px; height: 756px;"/>
 
-![TransFull](https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans_full.png)
-
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans_full.png" alt="TransFull" style="width: 425px; height: 756px;"/>
 

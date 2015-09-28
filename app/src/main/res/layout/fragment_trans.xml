@@ -13,7 +13,7 @@
 
         <com.silverforge.controls.BusyIndicator
             app:bigpoint_color="@color/trans_bigpoint"
-            app:smallpoint_color="@color/light_smallpoint"
+            app:smallpoint_color="@color/trans_smallpoint"
 
             android:layout_width="300dp"
             android:layout_height="150dp"
