@@ -28,7 +28,7 @@ public final class BusyIndicator extends Indicator {
     private float maxValue;
     private float currentValue;
 
-    private byte angleModifier = 1;
+    private int angleModifier;
     private float arcAngle;
     private int textAlpha;
 
@@ -88,10 +88,10 @@ public final class BusyIndicator extends Indicator {
         int action = event.getAction();
         switch (action) {
             case MotionEvent.ACTION_UP:
-                angleModifier = 1;
+                angleModifier = configSettings.getAngleModifier();
                 break;
             case MotionEvent.ACTION_DOWN:
-                angleModifier = 3;
+                angleModifier += 3;
                 break;
         }
 
@@ -114,6 +114,16 @@ public final class BusyIndicator extends Indicator {
         calculateProgress((float)value);
     }
 
+    public void setAngleModifier(int angleModifier) {
+
+        if (angleModifier > 3)
+            angleModifier = 3;
+        if (angleModifier < 1)
+            angleModifier = 1;
+
+        this.angleModifier = angleModifier;
+        configSettings.setAngleModifier(angleModifier);
+    }
 
     float getArcAngle() {
         return arcAngle;
@@ -150,6 +160,7 @@ public final class BusyIndicator extends Indicator {
         bigRadius = positionSettings.getBigRadius();
         singleRadius = positionSettings.getSingleRadius();
         singlePointRadius = positionSettings.getSinglePointRadius();
+        angleModifier = configSettings.getAngleModifier();
     }
 
     private void initializeCalculators(PositionSettings posSettings) {

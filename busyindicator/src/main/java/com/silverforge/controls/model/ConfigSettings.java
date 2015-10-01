@@ -14,4 +14,5 @@ public class ConfigSettings {
     private boolean isPercentageVisible;
     private int percentageDecimalPlaces;
     private boolean isInfinite;
+    private int angleModifier;
 }

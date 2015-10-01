@@ -13,6 +13,7 @@
         android:gravity="center">
 
         <com.silverforge.controls.BusyIndicator
+            app:angle_modifier="3"
             app:background_is_visible="true"
             app:background_color="@color/dark_background"
             app:bigpoint_color="@color/dark_bigpoint"

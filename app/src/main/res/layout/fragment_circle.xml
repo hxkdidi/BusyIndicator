@@ -13,6 +13,8 @@
         android:background="@color/light_fragment_background">
 
         <com.silverforge.controls.BusyIndicator
+            android:id="@+id/infiniteCircleBusyIndicator"
+
             app:background_is_visible="true"
             app:background_shape="circle"
             app:background_color="@color/light_background"

@@ -14,5 +14,6 @@
         <attr name="max_value" format="float" />
         <attr name="percentage_is_visible" format="boolean" />
         <attr name="percentage_decimal_places" format="integer" />
+        <attr name="angle_modifier" format="integer" />
     </declare-styleable>
 </resources>

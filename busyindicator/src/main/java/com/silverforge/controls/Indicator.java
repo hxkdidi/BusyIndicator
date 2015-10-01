@@ -75,6 +75,12 @@ class Indicator extends View {
         if (decimalPlaces < 0)
             decimalPlaces = 0;
 
+        int angleModifier = attributes.getInt(R.styleable.BusyIndicator_angle_modifier, 1);
+        if (angleModifier > 3)
+            angleModifier = 3;
+        if (angleModifier < 1)
+            angleModifier = 1;
+
         configSettings.setBackgroundColor(backgroundColor);
         configSettings.setBackgroundShape(backgroundShape);
         configSettings.setBackgroundVisible(isBackgroundVisible);
@@ -85,6 +91,7 @@ class Indicator extends View {
         configSettings.setPercentageDecimalPlaces(decimalPlaces);
         configSettings.setMaxValue(maxValue);
         configSettings.setInfinite(infinite);
+        configSettings.setAngleModifier(angleModifier);
 
         return configSettings;
     }
