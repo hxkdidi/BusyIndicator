@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,8 +22,15 @@ public class TransFragment extends Fragment {
         transBusyIndicator = (BusyIndicator) view.findViewById(R.id.finiteTransBusyIndicator);
 
         transBusyIndicator.setMaxValue(83);
-//        new BusyIndicatorAsyncTask(getActivity(), transBusyIndicator).execute();
-        new FiniteTransparentBusyIndicatorAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        transBusyIndicator.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    new FiniteTransparentBusyIndicatorAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                return true;
+            }
+        });
         return view;
     }
 

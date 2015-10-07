@@ -1,10 +1,12 @@
 package com.silverforge.busyindicator;
 
+import android.app.Notification;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -24,9 +26,16 @@ public class CircleFragment extends Fragment {
         infiniteCircleBusyIndicator = (BusyIndicator) view.findViewById(R.id.infiniteCircleBusyIndicator);
 
         circleBusyIndicator.setMaxValue(102);
-//        new BusyIndicatorAsyncTask(getActivity(), circleBusyIndicator).execute();
+        circleBusyIndicator.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    new FiniteCircleBusyIndicatorAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }
+                return true;
+            }
+        });
         new InfiniteBusyModifier().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new FiniteCircleBusyIndicatorAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return view;
     }    

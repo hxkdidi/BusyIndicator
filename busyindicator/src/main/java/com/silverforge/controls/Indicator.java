@@ -84,8 +84,8 @@ class Indicator extends View {
         float strokeWidthMultiplier = attributes.getFloat(R.styleable.BusyIndicator_stroke_width_multiplier, 6);
         if (strokeWidthMultiplier < 0.2)
             strokeWidthMultiplier = 0.2f;
-        if (strokeWidthMultiplier > 10)
-            strokeWidthMultiplier = 10;
+        if (strokeWidthMultiplier > 8)
+            strokeWidthMultiplier = 8;
 
         boolean loadPointsAreVisible = attributes.getBoolean(R.styleable.BusyIndicator_load_points_are_visible, true);
 
