@@ -31,6 +31,7 @@
             app:max_value="100"
             app:percentage_is_visible="true"
             app:percentage_decimal_places="0"
+            app:stroke_width_multiplier="10"
 
             android:layout_width="300dp"
             android:layout_height="150dp"

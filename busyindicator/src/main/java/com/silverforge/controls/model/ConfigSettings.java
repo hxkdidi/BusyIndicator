@@ -15,4 +15,6 @@ public class ConfigSettings {
     private int percentageDecimalPlaces;
     private boolean isInfinite;
     private int angleModifier;
+    private float strokeWidthMultiplier;
+    private boolean loadPointsAreVisible;
 }

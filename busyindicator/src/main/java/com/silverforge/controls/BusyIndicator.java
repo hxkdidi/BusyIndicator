@@ -9,7 +9,6 @@ import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AnimationSet;
-import android.widget.TextView;
 
 import com.silverforge.controls.calculators.CoordinateCalculator;
 import com.silverforge.controls.calculators.FiniteLoadCalculator;
@@ -111,7 +110,7 @@ public final class BusyIndicator extends Indicator {
     }
 
     public void setValue(int value) {
-        calculateProgress((float)value);
+        calculateProgress((float) value);
     }
 
     public void setAngleModifier(int angleModifier) {
@@ -198,7 +197,8 @@ public final class BusyIndicator extends Indicator {
     private void initializePaints(PositionSettings posSettings) {
         float bigRadius = posSettings.getBigRadius();
         float singlePointRadius = posSettings.getSinglePointRadius();
-        canvasPainter.initializePaints(configSettings.getBigPointColor(), configSettings.getSmallPointColor(), bigRadius, singlePointRadius);
+        float strokeWidthMultiplier = configSettings.getStrokeWidthMultiplier();
+        canvasPainter.initializePaints(configSettings.getBigPointColor(), configSettings.getSmallPointColor(), bigRadius, singlePointRadius, strokeWidthMultiplier);
     }
 
     private void initializeTextPositions(PositionSettings posSettings) {
@@ -266,19 +266,21 @@ public final class BusyIndicator extends Indicator {
     private void drawLoadingIndicator(Canvas canvas) {
         canvas.drawArc(rect, 630, arcAngle, false, canvasPainter.getSinglePaintTransparent());
 
-        for (ItemCoordinate item : finiteLoadCalculator.getOuterItems()) {
+        if (configSettings.isLoadPointsAreVisible()) {
+            for (ItemCoordinate item : finiteLoadCalculator.getOuterItems()) {
 
-            float itemAngle = item.getAngle();
-            if (itemAngle >= 270)
-                itemAngle -= 270;
-            else
-                itemAngle += 90;
+                float itemAngle = item.getAngle();
+                if (itemAngle >= 270)
+                    itemAngle -= 270;
+                else
+                    itemAngle += 90;
 
-            if (itemAngle > arcAngle) {
-                canvasPainter.getBigPaint().setAlpha(100);
-                canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getBigPaint());
-            } else {
-                canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getSinglePaint());
+                if (itemAngle > arcAngle) {
+                    canvasPainter.getBigPaint().setAlpha(100);
+                    canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getBigPaint());
+                } else {
+                    canvas.drawCircle(item.getX(), item.getY(), singlePointRadius, canvasPainter.getSinglePaint());
+                }
             }
         }
 

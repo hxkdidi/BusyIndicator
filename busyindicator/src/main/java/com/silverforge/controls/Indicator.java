@@ -22,10 +22,10 @@ class Indicator extends View {
         super(context, attrs, defStyleAttr);
 
         configSettings = readAttributes(context, attrs, defStyleAttr);
-        initializeMembers(configSettings);
+        initializeMembers();
     }
 
-    private void initializeMembers(ConfigSettings configSettings) {
+    private void initializeMembers() {
         decimalPlacesMap.put(0, "%.0f%%");
         decimalPlacesMap.put(1, "%.1f%%");
         decimalPlacesMap.put(2, "%.2f%%");
@@ -81,6 +81,14 @@ class Indicator extends View {
         if (angleModifier < 1)
             angleModifier = 1;
 
+        float strokeWidthMultiplier = attributes.getFloat(R.styleable.BusyIndicator_stroke_width_multiplier, 6);
+        if (strokeWidthMultiplier < 0.2)
+            strokeWidthMultiplier = 0.2f;
+        if (strokeWidthMultiplier > 10)
+            strokeWidthMultiplier = 10;
+
+        boolean loadPointsAreVisible = attributes.getBoolean(R.styleable.BusyIndicator_load_points_are_visible, true);
+
         configSettings.setBackgroundColor(backgroundColor);
         configSettings.setBackgroundShape(backgroundShape);
         configSettings.setBackgroundVisible(isBackgroundVisible);
@@ -92,6 +100,8 @@ class Indicator extends View {
         configSettings.setMaxValue(maxValue);
         configSettings.setInfinite(infinite);
         configSettings.setAngleModifier(angleModifier);
+        configSettings.setStrokeWidthMultiplier(strokeWidthMultiplier);
+        configSettings.setLoadPointsAreVisible(loadPointsAreVisible);
 
         return configSettings;
     }

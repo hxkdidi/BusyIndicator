@@ -15,5 +15,7 @@
         <attr name="percentage_is_visible" format="boolean" />
         <attr name="percentage_decimal_places" format="integer" />
         <attr name="angle_modifier" format="integer" />
+        <attr name="stroke_width_multiplier" format="float" />
+        <attr name="load_points_are_visible" format="boolean" />
     </declare-styleable>
 </resources>
