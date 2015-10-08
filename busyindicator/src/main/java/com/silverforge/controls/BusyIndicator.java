@@ -198,7 +198,9 @@ public final class BusyIndicator extends Indicator {
         float bigRadius = posSettings.getBigRadius();
         float singlePointRadius = posSettings.getSinglePointRadius();
         float strokeWidthMultiplier = configSettings.getStrokeWidthMultiplier();
-        canvasPainter.initializePaints(configSettings.getBigPointColor(), configSettings.getSmallPointColor(), bigRadius, singlePointRadius, strokeWidthMultiplier);
+        int indicatorAlpha = configSettings.getIndicatorAlpha();
+
+        canvasPainter.initializePaints(configSettings.getBigPointColor(), configSettings.getSmallPointColor(), bigRadius, singlePointRadius, strokeWidthMultiplier, indicatorAlpha);
     }
 
     private void initializeTextPositions(PositionSettings posSettings) {

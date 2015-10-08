@@ -17,4 +17,5 @@ public class ConfigSettings {
     private int angleModifier;
     private float strokeWidthMultiplier;
     private boolean loadPointsAreVisible;
+    private int indicatorAlpha;
 }

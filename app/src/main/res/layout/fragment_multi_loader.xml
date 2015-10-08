@@ -11,10 +11,21 @@
         android:orientation="vertical"
         android:gravity="center">
 
+        <Button
+            android:id="@+id/multiLaunchButton"
+            android:text="@string/launch"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <com.silverforge.controls.BusyIndicator
             android:id="@+id/finiteMultiBusyIndicator1"
 
             app:smallpoint_color="@color/multi1_smallpoint"
+            app:indicator_alpha="180"
+            app:background_is_visible="true"
+            app:background_color="@color/multi_background"
+            app:background_shape="circle"
 
             app:infinite="false"
             app:stroke_width_multiplier="4"
@@ -30,6 +41,7 @@
             android:id="@+id/finiteMultiBusyIndicator2"
 
             app:smallpoint_color="@color/multi2_smallpoint"
+            app:indicator_alpha="180"
 
             app:infinite="false"
             app:stroke_width_multiplier="5"
@@ -45,6 +57,7 @@
             android:id="@+id/finiteMultiBusyIndicator3"
 
             app:smallpoint_color="@color/multi3_smallpoint"
+            app:indicator_alpha="180"
 
             app:infinite="false"
             app:stroke_width_multiplier="6"
@@ -56,6 +69,7 @@
             android:layout_height="200dp"/>
 
         <TextView
+            android:id="@+id/loadingStatusText"
             android:text="@string/loading"
             android:textSize="18sp"
             android:textStyle="bold"

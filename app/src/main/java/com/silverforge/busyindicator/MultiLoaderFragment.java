@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.silverforge.controls.BusyIndicator;
 
@@ -16,6 +18,12 @@ public class MultiLoaderFragment extends Fragment {
     private BusyIndicator multiBusyIndicator1;
     private BusyIndicator multiBusyIndicator2;
     private BusyIndicator multiBusyIndicator3;
+    private TextView loadingStatusText;
+    private Button multiLaunchButton;
+
+    boolean busy1Done;
+    boolean busy2Done;
+    boolean busy3Done;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -24,13 +32,31 @@ public class MultiLoaderFragment extends Fragment {
         multiBusyIndicator2 = (BusyIndicator) view.findViewById(R.id.finiteMultiBusyIndicator2);
         multiBusyIndicator3 = (BusyIndicator) view.findViewById(R.id.finiteMultiBusyIndicator3);
 
+        loadingStatusText = (TextView) view.findViewById(R.id.loadingStatusText);
+        multiLaunchButton = (Button) view.findViewById(R.id.multiLaunchButton);
+
         multiBusyIndicator1.setMaxValue(83);
         multiBusyIndicator2.setMaxValue(530);
         multiBusyIndicator3.setMaxValue(962);
 
-        new FiniteMultiBusyIndicatorAsync1().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new FiniteMultiBusyIndicatorAsync2().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new FiniteMultiBusyIndicatorAsync3().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        multiLaunchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadingStatusText.setText("loading...");
+                busy1Done = false;
+                busy2Done = false;
+                busy3Done = false;
+
+                multiBusyIndicator1.setValue(0);
+                multiBusyIndicator2.setValue(0);
+                multiBusyIndicator3.setValue(0);
+
+                new FiniteMultiBusyIndicatorAsync1().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new FiniteMultiBusyIndicatorAsync2().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                new FiniteMultiBusyIndicatorAsync3().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            }
+        });
+
         return view;
     }
 
@@ -65,6 +91,9 @@ public class MultiLoaderFragment extends Fragment {
                 @Override
                 public void run() {
                     multiBusyIndicator1.setValue(83);
+                    busy1Done = true;
+                    if (busy1Done && busy2Done && busy3Done)
+                        loadingStatusText.setText("done");
                 }
             });
 
@@ -90,7 +119,7 @@ public class MultiLoaderFragment extends Fragment {
                     }
                 });
 
-                i = i + rand.nextInt(60) + 1;
+                i = i + rand.nextInt(90) + 1;
 
                 try {
                     Thread.sleep(1000);
@@ -103,6 +132,9 @@ public class MultiLoaderFragment extends Fragment {
                 @Override
                 public void run() {
                     multiBusyIndicator2.setValue(530);
+                    busy2Done = true;
+                    if (busy1Done && busy2Done && busy3Done)
+                        loadingStatusText.setText("done");
                 }
             });
 
@@ -128,7 +160,7 @@ public class MultiLoaderFragment extends Fragment {
                     }
                 });
 
-                i = i + rand.nextInt(230) + 1;
+                i = i + rand.nextInt(190) + 1;
 
                 try {
                     Thread.sleep(1000);
@@ -141,6 +173,9 @@ public class MultiLoaderFragment extends Fragment {
                 @Override
                 public void run() {
                     multiBusyIndicator3.setValue(962);
+                    busy3Done = true;
+                    if (busy1Done && busy2Done && busy3Done)
+                        loadingStatusText.setText("done");
                 }
             });
 

@@ -27,7 +27,7 @@ public class CanvasPainter {
     @Getter
     private Paint textPaint;
 
-    public void initializePaints(int outerPointColor, int innerPointColor, float outerpointRadius, float innerpointRadius, float strokeWidthMultiplier) {
+    public void initializePaints(int outerPointColor, int innerPointColor, float outerpointRadius, float innerpointRadius, float strokeWidthMultiplier, int indicatorAlpha) {
 
         float strokeWidth = innerpointRadius * strokeWidthMultiplier;
 
@@ -42,7 +42,7 @@ public class CanvasPainter {
         singlePaintTransparent.setStyle(Paint.Style.STROKE);
         singlePaintTransparent.setStrokeWidth(strokeWidth);
         singlePaintTransparent.setColor(innerPointColor);
-        singlePaintTransparent.setAlpha(100);
+        singlePaintTransparent.setAlpha(indicatorAlpha);
 
         float textSize = (float) (outerpointRadius * 0.4);
         textPaint = new Paint();

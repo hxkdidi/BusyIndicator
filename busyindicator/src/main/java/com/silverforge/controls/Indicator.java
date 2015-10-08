@@ -88,6 +88,11 @@ class Indicator extends View {
             strokeWidthMultiplier = 8;
 
         boolean loadPointsAreVisible = attributes.getBoolean(R.styleable.BusyIndicator_load_points_are_visible, true);
+        int indicatorAlpha = attributes.getInt(R.styleable.BusyIndicator_indicator_alpha, 100);
+        if (indicatorAlpha < 100)
+            indicatorAlpha = 100;
+        if (indicatorAlpha > 255)
+            indicatorAlpha = 255;
 
         configSettings.setBackgroundColor(backgroundColor);
         configSettings.setBackgroundShape(backgroundShape);
@@ -102,6 +107,7 @@ class Indicator extends View {
         configSettings.setAngleModifier(angleModifier);
         configSettings.setStrokeWidthMultiplier(strokeWidthMultiplier);
         configSettings.setLoadPointsAreVisible(loadPointsAreVisible);
+        configSettings.setIndicatorAlpha(indicatorAlpha);
 
         return configSettings;
     }
