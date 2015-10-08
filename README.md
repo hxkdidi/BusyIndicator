@@ -18,7 +18,7 @@ The BusyIndicator is a progress indicator with determined and indeterminate stat
 
 Current version is [![Download](https://api.bintray.com/packages/silverforge/maven/busyindicator/images/download.svg) ](https://bintray.com/silverforge/maven/busyindicator/_latestVersion)
 
-[![BusyIndicatorDemo](https://j.gifs.com/KRoYzb.gif)](https://youtu.be/rOqh9h-DEDw)
+[![BusyIndicatorDemo](https://j.gifs.com/KRoYzb.gif)](https://youtu.be/ZjRHlSPsWxA)
 
 ## How do I get set up? ##
 
@@ -27,7 +27,7 @@ dependencies {
 
 ...
 
-    compile 'com.silverforge.controls:busyindicator:1.0.0'
+    compile 'com.silverforge.controls:busyindicator:1.1.0'
 }
 
 ```
@@ -62,21 +62,31 @@ limitations under the License.
 You can control the busyindicator behavior or look & feel with the following attributes:
 
 ###### Indeterminate ######
+###### v1.0 ######
 * **bigpoint_color** - The foreground color of the points (circles) on outer radius. By default it is gray.
 * **smallpoint_color** - The foreground color of the point (circle) on the inner radius. By default it is black.
-* **bigpoint_count** - The count of points (circles) on outer radius. By default it is 4.
+* **bigpoint_count** - The count of points (circles) on outer radius. By default it is 4. (Range is integer between 4 and 20)
 * **background_is_visible** - *true* of *false*. If true you have a light gray rectangle background with rounded corner by default .
 * **background_color** - The background color if visible. By default it is light gray.
-* **background_shape** - *rounded_rectangle* or *circle* The shape of background.
+* **background_shape** - The shape of background. (Values could be either *rounded\_rectangle* or *circle*)
+
+###### v1.1 ######
+* **angle_modifier** - The speed multiplicator of the busy indicator. By default it is 1. (Range is integer between 1 and 3)
 
 ###### Determined ######
 
 All of the attributes mentioned in previous section plus
 
+###### v1.0 ######
 * **infinite** - *true* of *false*. If true the busyindicator is active otherwise the load indicator is active.
 * **percentage_is_visible** - *true* of *false*. If true the percentage text appears.
 * **percentage_decimal_places** - Could be : [0, 1, 2]. The decimal places of the percentage text.
-* **max_value** - The max value of the progress. 
+* **max_value** - The max value of the progress.
+ 
+###### v1.1 ######
+* **stroke_width_multiplier** - The width multiplicator of the indicator. (Range is float between 0.2F and 14F)
+* **load_points_are_visible** - *true* or *false*. If true the outer points are visible otherwise they are hidden.
+* **indicator_alpha** - The indicator color alpha. By default it is 100. (Range is integer between 100 and 255).
 
 #### Dark rectangle background ####
 
@@ -84,6 +94,7 @@ All of the attributes mentioned in previous section plus
 
 ```xml
 <com.silverforge.controls.BusyIndicator
+    app:angle_modifier="3"
     app:background_is_visible="true"
     app:background_color="@color/dark_background"
     app:bigpoint_color="@color/dark_bigpoint"
@@ -112,6 +123,7 @@ All of the attributes mentioned in previous section plus
     app:max_value="100"
     app:percentage_is_visible="true"
     app:percentage_decimal_places="1"
+    app:load_points_are_visible="false"
 
     android:layout_width="300dp"
     android:layout_height="150dp"
@@ -125,13 +137,15 @@ All of the attributes mentioned in previous section plus
 
 ```xml
 <com.silverforge.controls.BusyIndicator
+    android:id="@+id/infiniteCircleBusyIndicator"
+
     app:background_is_visible="true"
     app:background_shape="circle"
     app:background_color="@color/light_background"
     app:bigpoint_color="@color/light_bigpoint"
     app:smallpoint_color="@color/light_smallpoint"
 
-    android:layout_width="300dp"
+    android:layout_width="150dp"
     android:layout_height="150dp"
     android:layout_margin="10dp"
     />
@@ -153,9 +167,10 @@ All of the attributes mentioned in previous section plus
     app:infinite="false"
     app:max_value="100"
     app:percentage_is_visible="true"
-    app:percentage_decimal_places="1"
+    app:percentage_decimal_places="2"
+    app:stroke_width_multiplier="14"
 
-    android:layout_width="300dp"
+    android:layout_width="150dp"
     android:layout_height="150dp"
     android:layout_margin="10dp"
     />
@@ -168,7 +183,7 @@ All of the attributes mentioned in previous section plus
 ```xml
 <com.silverforge.controls.BusyIndicator
     app:bigpoint_color="@color/trans_bigpoint"
-    app:smallpoint_color="@color/light_smallpoint"
+    app:smallpoint_color="@color/trans_smallpoint"
 
     android:layout_width="300dp"
     android:layout_height="150dp"
@@ -189,13 +204,21 @@ All of the attributes mentioned in previous section plus
     app:infinite="false"
     app:max_value="100"
     app:percentage_is_visible="true"
-    app:percentage_decimal_places="1"
+    app:percentage_decimal_places="0"
+    app:stroke_width_multiplier="0.8"
 
     android:layout_width="300dp"
     android:layout_height="150dp"
     android:layout_margin="10dp"
     />
 ```
+
+#### Multi progress indicators ####
+
+###### Progress indicator ######
+
+[Multi progress indicator](https://github.com/silverforge/BusyIndicator/blob/master/app/src/main/res/layout/fragment_multi_loader.xml)
+
 
 #### How to control progress indicator from code #####
 
@@ -242,18 +265,49 @@ For example if you have a progress from 0 to 756, you just set *maxValue()* to 7
     }
 ```
 
+#### How to adjust indeterminate busy indicator speed ####
 
-###### UI ######
+Actualy it's simple, you can set the angle modifier via *setAngleModifier()* method at any time.
+The busy indicator immediately changes the speed once you set it.
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect.png" alt="DarkRect" style="width: 425px; height: 756px;"/>
+```java
+    class InfiniteBusyModifier extends AsyncTask {
+        @Override
+        protected Object doInBackground(Object[] params) {
+            final Random rand = new Random();
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_full.png" alt="DarkRectFull" style="width: 425px; height: 756px;"/>
+            FragmentActivity activity = getActivity();
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle.png" alt="LightCircle" style="width: 425px; height: 756px;"/>
+            while (true) {
+                final int a = rand.nextInt(3) + 1;
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_full.png" alt="LightCircleFull" style="width: 425px; height: 756px;"/>
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+						
+						// NOTE : You can set the speed
+                        infiniteCircleBusyIndicator.setAngleModifier(a);
+                    }
+                });
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans.png" alt="Trans" style="width: 425px; height: 756px;"/>
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+```
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans_full.png" alt="TransFull" style="width: 425px; height: 756px;"/>
 
+
+#### UI ####
+
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_v1_1.png" alt="DarkRect" style="width: 425px; height: 756px;"/>
+
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_v_1_1.png" alt="LightCircle" style="width: 425px; height: 756px;"/>
+
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/trans_v_1_1.png" alt="Trans" style="width: 425px; height: 756px;"/>
+
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/multi_v_1_1.png" alt="Trans" style="width: 425px; height: 756px;"/>
