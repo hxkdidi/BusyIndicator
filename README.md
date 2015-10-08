@@ -304,7 +304,7 @@ The busy indicator immediately changes the speed once you set it.
 
 #### UI ####
 
-<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_v1_1.png" alt="DarkRect" style="width: 425px; height: 756px;"/>
+<img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/dark_rect_v_1_1.png" alt="DarkRect" style="width: 425px; height: 756px;"/>
 
 <img src="https://raw.githubusercontent.com/silverforge/BusyIndicator/master/assets/light_circle_v_1_1.png" alt="LightCircle" style="width: 425px; height: 756px;"/>
 
