@@ -31,6 +31,14 @@ public class CanvasPainter {
 
         float strokeWidth = innerpointRadius * strokeWidthMultiplier;
 
+        float textSizeMultiplier = 0.4F;
+        if (strokeWidthMultiplier > 0 && strokeWidthMultiplier < 7)
+            textSizeMultiplier = 0.4F;
+        if (strokeWidthMultiplier > 6 && textSizeMultiplier < 11)
+            textSizeMultiplier = 0.35F;
+        if (strokeWidthMultiplier > 10 && textSizeMultiplier < 15)
+            textSizeMultiplier = 0.3F;
+
         bigPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         bigPaint.setColor(outerPointColor);
 
@@ -44,7 +52,7 @@ public class CanvasPainter {
         singlePaintTransparent.setColor(innerPointColor);
         singlePaintTransparent.setAlpha(indicatorAlpha);
 
-        float textSize = (float) (outerpointRadius * 0.4);
+        float textSize = (float) (outerpointRadius * textSizeMultiplier);
         textPaint = new Paint();
         textPaint.setColor(innerPointColor);
         textPaint.setTextAlign(Paint.Align.CENTER);
