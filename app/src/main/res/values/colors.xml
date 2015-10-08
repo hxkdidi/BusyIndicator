@@ -15,4 +15,8 @@
 
     <color name="trans_bigpoint">#FFF17A00</color>
     <color name="trans_smallpoint">#FF0D2C35</color>
+
+    <color name="multi1_smallpoint">#FF551F00</color>
+    <color name="multi2_smallpoint">#FF051C38</color>
+    <color name="multi3_smallpoint">#FF184A00</color>
 </resources>

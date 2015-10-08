@@ -14,16 +14,55 @@
         <com.silverforge.controls.BusyIndicator
             android:id="@+id/finiteMultiBusyIndicator1"
 
-            app:bigpoint_color="@color/trans_bigpoint"
-            app:smallpoint_color="@color/trans_smallpoint"
+            app:smallpoint_color="@color/multi1_smallpoint"
+
+            app:infinite="false"
+            app:stroke_width_multiplier="4"
+            app:load_points_are_visible="false"
+            app:percentage_is_visible="false"
+
+            android:layout_centerInParent="true"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            />
+
+        <com.silverforge.controls.BusyIndicator
+            android:id="@+id/finiteMultiBusyIndicator2"
+
+            app:smallpoint_color="@color/multi2_smallpoint"
+
+            app:infinite="false"
+            app:stroke_width_multiplier="5"
+            app:load_points_are_visible="false"
+            app:percentage_is_visible="false"
+
+            android:layout_centerInParent="true"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            />
+
+        <com.silverforge.controls.BusyIndicator
+            android:id="@+id/finiteMultiBusyIndicator3"
+
+            app:smallpoint_color="@color/multi3_smallpoint"
 
             app:infinite="false"
             app:stroke_width_multiplier="6"
             app:load_points_are_visible="false"
+            app:percentage_is_visible="false"
 
-            android:layout_width="300dp"
-            android:layout_height="300dp"
-            android:layout_margin="10dp"
-            />
+            android:layout_centerInParent="true"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
+
+        <TextView
+            android:text="@string/loading"
+            android:textSize="18sp"
+            android:textStyle="bold"
+
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </RelativeLayout>
 </FrameLayout>
