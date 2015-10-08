@@ -25,6 +25,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 TransFragment transFragment = new TransFragment();
                 return transFragment;
+            case 3:
+                MultiLoaderFragment multiLoaderFragment = new MultiLoaderFragment();
+                return multiLoaderFragment;
             default:
                 return null;
         }

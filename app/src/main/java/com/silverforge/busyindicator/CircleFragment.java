@@ -25,6 +25,7 @@ public class CircleFragment extends Fragment {
         circleBusyIndicator = (BusyIndicator) view.findViewById(R.id.finiteCircleBusyIndicator);
         infiniteCircleBusyIndicator = (BusyIndicator) view.findViewById(R.id.infiniteCircleBusyIndicator);
 
+        new InfiniteBusyModifier().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         circleBusyIndicator.setMaxValue(102);
         circleBusyIndicator.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -35,7 +36,6 @@ public class CircleFragment extends Fragment {
                 return true;
             }
         });
-        new InfiniteBusyModifier().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
         return view;
     }    
@@ -45,13 +45,15 @@ public class CircleFragment extends Fragment {
         protected Object doInBackground(Object[] params) {
             final Random rand = new Random();
 
+            FragmentActivity activity = getActivity();
+
             while (true) {
                 final int a = rand.nextInt(3) + 1;
 
-                getActivity().runOnUiThread(new Runnable() {
+                activity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                    infiniteCircleBusyIndicator.setAngleModifier(a);
+                        infiniteCircleBusyIndicator.setAngleModifier(a);
                     }
                 });
 

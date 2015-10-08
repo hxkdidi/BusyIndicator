@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.silverforge.busyindicator.MultiLoaderFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.silverforge.controls.BusyIndicator
+            android:id="@+id/finiteMultiBusyIndicator1"
+
+            app:bigpoint_color="@color/trans_bigpoint"
+            app:smallpoint_color="@color/trans_smallpoint"
+
+            app:infinite="false"
+            app:stroke_width_multiplier="6"
+            app:load_points_are_visible="false"
+
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_margin="10dp"
+            />
+    </RelativeLayout>
+</FrameLayout>

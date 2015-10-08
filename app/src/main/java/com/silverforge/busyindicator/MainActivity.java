@@ -21,9 +21,10 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("Rectangle"));
+        tabLayout.addTab(tabLayout.newTab().setText("Rect"));
         tabLayout.addTab(tabLayout.newTab().setText("Circle"));
         tabLayout.addTab(tabLayout.newTab().setText("Trans"));
+        tabLayout.addTab(tabLayout.newTab().setText("Multi"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
