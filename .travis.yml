@@ -5,4 +5,4 @@ android:
     - android-22
     - extra
 
-script: ./gradlew connectedAndroidTest
+# script: ./gradlew connectedAndroidTest
