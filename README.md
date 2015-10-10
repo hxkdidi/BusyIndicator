@@ -3,6 +3,10 @@
 
 [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BusyIndicator-brightgreen.svg?style=flat)](http://android-arsenal.com/details/1/2560)
 
+
+[![Circle CI](https://circleci.com/gh/silverforge/BusyIndicator/tree/master.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/silverforge/BusyIndicator/tree/master)
+
+
 Contents
 --------
 
