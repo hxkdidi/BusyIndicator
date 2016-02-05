@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.animation.AnimationSet;
@@ -38,6 +39,8 @@ public final class BusyIndicator extends Indicator {
     private float singlePointRadius;
     private float textPosX;
     private float textPosY;
+
+    private String customText;
 
     private CanvasPainter canvasPainter;
     private InfiniteLoadCalculator infiniteLoadCalculator;
@@ -122,6 +125,14 @@ public final class BusyIndicator extends Indicator {
 
         this.angleModifier = angleModifier;
         configSettings.setAngleModifier(angleModifier);
+    }
+
+    public void setSingleColor(int singleColor) {
+        canvasPainter.setSingleColor(singleColor);
+    }
+
+    public void setCustomText(String customText) {
+        this.customText = customText;
     }
 
     float getArcAngle() {
@@ -286,20 +297,45 @@ public final class BusyIndicator extends Indicator {
             }
         }
 
-        if (configSettings.isPercentageVisible()) {
-            float v = (100 / maxValue) * currentValue;
+        if (!TextUtils.isEmpty(customText)) {
+            if (configSettings.isPercentageVisible()) {
+                String percentageText = getPercentageString();
 
-            String formatString = decimalPlacesMap.get(configSettings.getPercentageDecimalPlaces());
-            String text = String.format(formatString, v);
+                float descent = canvasPainter.getTextPaint().descent();
+                float ascent = canvasPainter.getTextPaint().ascent();
 
-            float descent = canvasPainter.getTextPaint().descent();
-            float ascent = canvasPainter.getTextPaint().ascent();
+                textPosY = layOutCenterY - ((descent + ascent) / 2);
 
-            textPosY = layOutCenterY - ((descent + ascent) / 2);
+                float correction = (float) (descent * 1.5);
 
-            canvasPainter.getTextPaint().setAlpha(textAlpha);
-            canvas.drawText(text, textPosX, textPosY, canvasPainter.getTextPaint());
+                canvasPainter.getTextPaint().setAlpha(textAlpha);
+                canvas.drawText(percentageText, textPosX, textPosY - correction, canvasPainter.getTextPaint());
+
+                canvas.drawText(customText, textPosX, textPosY + correction, canvasPainter.getCustomTextPaint());
+            } else {
+                writeTextToCenter(canvas, customText);
+            }
+        } else if (configSettings.isPercentageVisible()) {
+            String text = getPercentageString();
+            writeTextToCenter(canvas, text);
         }
+    }
+
+    private void writeTextToCenter(Canvas canvas, String text) {
+        float descent = canvasPainter.getTextPaint().descent();
+        float ascent = canvasPainter.getTextPaint().ascent();
+
+        textPosY = layOutCenterY - ((descent + ascent) / 2);
+
+        canvasPainter.getTextPaint().setAlpha(textAlpha);
+        canvas.drawText(text, textPosX, textPosY, canvasPainter.getTextPaint());
+    }
+
+    private String getPercentageString() {
+        float v = (100 / maxValue) * currentValue;
+
+        String formatString = decimalPlacesMap.get(configSettings.getPercentageDecimalPlaces());
+        return String.format(formatString, v);
     }
 
     private void calculateInfiniteMoves() {

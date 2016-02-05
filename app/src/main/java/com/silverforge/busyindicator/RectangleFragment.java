@@ -1,5 +1,6 @@
 package com.silverforge.busyindicator;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ public class RectangleFragment extends Fragment {
         rectangleBusyIndicator = (BusyIndicator) view.findViewById(R.id.finiteRectangleBusyIndicator);
 
         rectangleBusyIndicator.setMaxValue(314);
+        rectangleBusyIndicator.setSingleColor(Color.CYAN);
+        rectangleBusyIndicator.setCustomText("perec");
         rectangleBusyIndicator.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

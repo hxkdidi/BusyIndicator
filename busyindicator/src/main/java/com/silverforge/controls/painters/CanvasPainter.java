@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import com.silverforge.controls.model.ClipShape;
 
 import lombok.Getter;
+import lombok.Setter;
 
 public class CanvasPainter {
 
@@ -26,6 +27,11 @@ public class CanvasPainter {
 
     @Getter
     private Paint textPaint;
+
+    @Getter
+    private Paint customTextPaint;
+
+    private int alreadySetInnerPointColor = -1;
 
     public void initializePaints(int outerPointColor, int innerPointColor, float outerpointRadius, float innerpointRadius, float strokeWidthMultiplier, int indicatorAlpha) {
 
@@ -49,7 +55,10 @@ public class CanvasPainter {
         singlePaintTransparent.setAntiAlias(true);
         singlePaintTransparent.setStyle(Paint.Style.STROKE);
         singlePaintTransparent.setStrokeWidth(strokeWidth);
-        singlePaintTransparent.setColor(innerPointColor);
+        if (alreadySetInnerPointColor != -1)
+            singlePaintTransparent.setColor(alreadySetInnerPointColor);
+        else
+            singlePaintTransparent.setColor(innerPointColor);
         singlePaintTransparent.setAlpha(indicatorAlpha);
 
         float textSize = (float) (outerpointRadius * textSizeMultiplier);
@@ -58,8 +67,21 @@ public class CanvasPainter {
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTypeface(Typeface.MONOSPACE);
         textPaint.setTextSize(textSize);
+
+        float customTextSize = (float) (outerpointRadius * textSizeMultiplier * 0.6);
+        customTextPaint = new Paint();
+        customTextPaint.setColor(innerPointColor);
+        customTextPaint.setTextAlign(Paint.Align.CENTER);
+        customTextPaint.setTypeface(Typeface.MONOSPACE);
+        customTextPaint.setTextSize(customTextSize);
     }
 
+    public void setSingleColor(int innerPointColor) {
+        if (singlePaint != null)
+            singlePaint.setColor(innerPointColor);
+        else
+            alreadySetInnerPointColor = innerPointColor;
+    }
 
     public Bitmap getRoundedBitmap(Bitmap bitmap, ClipShape clipShape) {
         int zeroIntValue = 0;
