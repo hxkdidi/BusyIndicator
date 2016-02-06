@@ -31,7 +31,7 @@ dependencies {
 
 ...
 
-    compile 'com.silverforge.controls:busyindicator:1.1.0'
+    compile 'com.silverforge.controls:busyindicator:1.2.0'
 }
 
 ```
@@ -268,6 +268,25 @@ For example if you have a progress from 0 to 756, you just set *maxValue()* to 7
         }
     }
 ```
+
+###### v1.2 ######
+
+**Set the color of the load indicator from code**
+
+```java
+    rectangleBusyIndicator = (BusyIndicator) view.findViewById(R.id.finiteRectangleBusyIndicator);
+
+    rectangleBusyIndicator.setSingleColor(Color.CYAN);
+```
+
+**Add custom text below the percentage**
+
+```java
+    rectangleBusyIndicator = (BusyIndicator) view.findViewById(R.id.finiteRectangleBusyIndicator);
+
+    rectangleBusyIndicator.setCustomText("perec");
+```
+
 
 #### How to adjust indeterminate busy indicator speed ####
 
